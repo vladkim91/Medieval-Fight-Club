@@ -18,40 +18,41 @@
       <div id="attack-bodyparts">
         <p class="label attack">Attack</p>
         <select id="head-attack">
-          <option value=""></option>
-          <option value="normal-attack">Regular attack</option>
-          <option value="heavy-attack">Heavy attack</option>
+          <option value="off"data-apcost="0" class="">select one</option>
+          <option value="normal-attack" data-apcost="60" class="passive" >Regular attack (60)</option>
+          <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
         </select>
         <select id="torso-attack">
-          <option value=""></option>
-          <option value="normal-attack">Regular attack</option>
-          <option value="heavy-attack">Heavy attack</option>
+          <option value="off"data-apcost="0" class="">select one</option>
+          <option value="normal-attack" data-apcost="60" class="passive">Regular attack (60)</option>
+          <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
         </select>
         <select id="leg-attack">
-          <option value=""></option>
-          <option value="normal-attack">Regular attack</option>
-          <option value="heavy-attack">Heavy attack</option>
+          <option value="off"data-apcost="0" class="">select one</option>
+          <option value="normal-attack" data-apcost="60" class="passive">Regular attack (60)</option>
+          <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
         </select>
       </div>
       <div id="defend-bodyparts">
         <p class="label defend">Defend</p>
         <select id="head-defend">
-          <option value=""></option>
-          <option value="normal-attack">Defend</option>
+          <option value="def" data-apcost="0" class="">select one</option>
+          <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
         </select>
         <select id="torso-defend">
-          <option value=""></option>
-          <option value="normal-attack">Defend</option>
+          <option value="def"data-apcost="0" class="">select one</option>
+          <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
         </select>
         <select id="leg-defend">
-          <option value=""></option>
-          <option value="normal-attack">Defend</option>
+          <option value="def"data-apcost="0" class="">select one</option>
+          <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
         </select>
       </div>
       
-
-
+      
     </form>
+    <p id="ap-used">Action points used: 0</p>
+    <input type="button" id="submit-choice" value="Make your move!">
   </div>
   <script src="script.js"></script>
 </body>

@@ -1,4 +1,59 @@
 // Variables
+const headAttack = document.getElementById('head-attack');
+const torsoAttack = document.getElementById('torso-attack');
+const legAttack = document.getElementById('leg-attack');
+const headDefend = document.getElementById('head-defend');
+const torsoDefend = document.getElementById('torso-defend');
+const legDefend = document.getElementById('leg-defend');
+
+const apUsedMessage = document.getElementById('ap-used');
+
+const everyAttackOption = [
+  headAttack,
+  torsoAttack,
+  legAttack,
+  headDefend,
+  torsoDefend,
+  legDefend
+];
+
+const calculateApCost = () => {
+  let totalApCost = 0;
+  for (let i = 0; i < everyAttackOption.length; i++) {
+    for (let n = 0; n < everyAttackOption[i].length; n++) {
+      if (!everyAttackOption[i][n].classList.contains('passive')) {
+        totalApCost += parseInt(everyAttackOption[i][n].dataset.apcost);
+      }
+    }
+  }
+  console.log(totalApCost);
+  return totalApCost;
+};
+
+everyAttackOption.forEach((e) => {
+  e.addEventListener('change', () => {
+    for (let i = 0; i < e.length; i++) {
+      if (e.value == 'normal-attack') {
+        e[1].classList.remove('passive');
+        e[2].classList.add('passive');
+        console.log(e.value, 'normal+');
+      } else if (e.value == 'heavy-attack') {
+        e[2].classList.remove('passive');
+        e[1].classList.add('passive');
+        console.log(e.value, 'heavy+');
+      } else if (e.value == 'off') {
+        console.log(e.value, 'empty+');
+        e[1].classList.add('passive');
+        e[2].classList.add('passive');
+      } else if (e.value == 'defend') {
+        e[1].classList.remove('passive');
+      } else if (e.value == 'def') {
+        e[1].classList.add('passive');
+      }
+    }
+    calculateApCost(everyAttackOption);
+  });
+});
 let fightInProgress = false;
 // Classes
 

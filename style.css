@@ -1,3 +1,7 @@
+* {
+  font-family: 'MedievalSharp', cursive;
+}
+
 #pick-bodyparts {
   display: flex;
   justify-content: center;
@@ -8,14 +12,45 @@
 #attack-bodyparts, #defend-bodyparts {
   display: flex;
   flex-direction: column;
-  width: 50vh
+  width: 50vh;
+
 }
 
 .label{
-  font-family: 'MedievalSharp', cursive;
   margin: 10px auto;
+  font-size: 40px;
 }
 
 #attack-bodyparts select, #defend-bodyparts select {
-  margin: 2px;
+  margin: 5px;
+  padding: 10px;
+  font-size: 20px;
+  border: rgb(139, 119, 0) solid 3px;
+  border-radius: 4px;
+  border-style: outset;
 }
+
+#submit-choice {
+font-size: 20px;
+padding: 10px;
+border-style: outset;
+border-radius: 4px;
+color: white;
+background-color: goldenrod;
+width: 50vh;
+margin: 10px auto;
+
+}
+
+#fight-ui {
+  display: flex;
+  flex-direction: column;
+}
+
+#ap-used {
+  text-align: center;
+}
+
+
+
+
