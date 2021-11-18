@@ -5,10 +5,54 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
   <title>Medieval Fight Club</title>
 </head>
 <body>
+  <div id="fight-ui">
+    <form id="pick-bodyparts">
+      <div id="attack-bodyparts">
+        <p class="label attack">Attack</p>
+        <select id="head-attack">
+          <option value=""></option>
+          <option value="normal-attack">Regular attack</option>
+          <option value="heavy-attack">Heavy attack</option>
+        </select>
+        <select id="torso-attack">
+          <option value=""></option>
+          <option value="normal-attack">Regular attack</option>
+          <option value="heavy-attack">Heavy attack</option>
+        </select>
+        <select id="leg-attack">
+          <option value=""></option>
+          <option value="normal-attack">Regular attack</option>
+          <option value="heavy-attack">Heavy attack</option>
+        </select>
+      </div>
+      <div id="defend-bodyparts">
+        <p class="label defend">Defend</p>
+        <select id="head-defend">
+          <option value=""></option>
+          <option value="normal-attack">Defend</option>
+        </select>
+        <select id="torso-defend">
+          <option value=""></option>
+          <option value="normal-attack">Defend</option>
+        </select>
+        <select id="leg-defend">
+          <option value=""></option>
+          <option value="normal-attack">Defend</option>
+        </select>
+      </div>
+      
 
+
+    </form>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

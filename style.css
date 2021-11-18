@@ -1,0 +1,21 @@
+#pick-bodyparts {
+  display: flex;
+  justify-content: center;
+  
+
+}
+
+#attack-bodyparts, #defend-bodyparts {
+  display: flex;
+  flex-direction: column;
+  width: 50vh
+}
+
+.label{
+  font-family: 'MedievalSharp', cursive;
+  margin: 10px auto;
+}
+
+#attack-bodyparts select, #defend-bodyparts select {
+  margin: 2px;
+}
