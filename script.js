@@ -33,7 +33,7 @@ class FightingUnit {
     this.hp = this.str * 20;
     this.mp = this.int * 10;
   }
-  attack(enemy) {
+  attack(enemy, target, type, defense) {
     let hitStrength = 0;
     if (this.wp !== {}) {
       hitStrength += this.str;
@@ -209,9 +209,11 @@ const startFight = (hero, enemy) => {
           typeOfAttack.push(everyBattleOption[2][2].value);
         }
       }
+      hero.attack(enemy, currentTarget, typeOfAttack);
 
       console.log(typeOfAttack);
       console.log(currentTarget);
+      console.log(currentDefense);
     }
 
     // console.log(apUsed);
