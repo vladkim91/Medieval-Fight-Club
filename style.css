@@ -1,5 +1,6 @@
 * {
   font-family: 'MedievalSharp', cursive;
+  margin: 0;
 }
 
 #pick-bodyparts {
@@ -12,7 +13,7 @@
 #attack-bodyparts, #defend-bodyparts {
   display: flex;
   flex-direction: column;
-  width: 50vh;
+  width: 250px;
 
 }
 
@@ -37,7 +38,7 @@ border-style: outset;
 border-radius: 4px;
 color: white;
 background-color: goldenrod;
-width: 50vh;
+width: 40vh;
 margin: 10px auto;
 
 }
@@ -51,6 +52,26 @@ margin: 10px auto;
   text-align: center;
 }
 
+#fight-log {
+  background-color: gold;
+  width: 100%;
+  min-height: 80vh;
+  height: 100%;
+  border: solid black 3px;
+  background-image: url('images/log-background.png');
+  
+  background-size: 100% 80vh;
+  margin: 40px auto 0;
+  
+}
 
+#log {
+  text-align: center;
+  font-size: 35px;
+}
 
+.message-block {
+  margin-left: 20px;
+  padding: 5px;
 
+}

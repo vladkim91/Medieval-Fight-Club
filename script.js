@@ -17,6 +17,7 @@ const everyBattleOption = [
 ];
 
 let fightInProgress = false;
+
 // Classes
 
 class FightingUnit {
@@ -35,28 +36,44 @@ class FightingUnit {
   }
   attackCPU(hero) {
     let hitStrength = 0;
+    let hitMessage = '';
+    let heavyAttack = false;
     if (this.wp !== {}) {
       hitStrength += this.str;
     } else {
       hitStrength += this.str + this.wp.damage;
     }
+    if (Math.floor(Math.random() * 2) == 0) {
+      hitStrength = hitStrength * 1.4;
+      heavyAttack = true;
+    }
+
     let enemyAttack = ['head', 'torso', 'legs'];
     this.offense = enemyAttack[Math.floor(Math.random() * 3)];
     if (this.offense == hero.defense) {
-      console.log('hero blocked');
-      hitStrength /= 3;
+      const reducredHit = (hitStrength /= 3);
+      hitMessage = `${hero.name} blocked ${this.name}'s strike to the ${
+        hero.defense
+      } and reduced its impact to ${reducredHit.toFixed(0)}`;
 
       hero.hp -= hitStrength.toFixed(0);
-      // enemy.hp -= hitStrength.toFixed(0);
     } else {
-      // console.log(hitStrength);
       hero.hp -= hitStrength;
+      hitMessage = `${this.name} hit ${hero.name} to deal ${hitStrength} damage in the ${this.offense}`;
     }
-    console.log(hero.hp, hero.name);
+    const message = document.createElement('div');
+    message.classList.add('message-block');
+    message.innerText = hitMessage;
+    document.getElementById('move-log').appendChild(message);
+    console.log(hero.hp, hero.name, hitStrength);
   }
 
   attack(enemy, target, type, defense) {
+    let hitMessage = '';
+
     let hitStrength = 0;
+    let heavyAttack = false;
+
     if (this.wp !== {}) {
       hitStrength += this.str;
     } else {
@@ -70,6 +87,7 @@ class FightingUnit {
       } else {
         hitStrength = hitStrength * 1.4;
         hitStrength = parseInt(hitStrength.toFixed(0));
+        heavyAttack = true;
       }
     }
     if (target[0] == 'torso-attack') {
@@ -79,6 +97,7 @@ class FightingUnit {
       } else {
         hitStrength = hitStrength * 1.4;
         hitStrength = parseInt(hitStrength.toFixed(0));
+        heavyAttack = true;
       }
     }
     if (target[0] == 'leg-attack') {
@@ -88,6 +107,7 @@ class FightingUnit {
       } else {
         hitStrength = hitStrength * 1.4;
         hitStrength = parseInt(hitStrength.toFixed(0));
+        heavyAttack = true;
       }
     }
     if (defense[0] == 'head-defend') {
@@ -102,18 +122,25 @@ class FightingUnit {
     // Enemy defense
     const enemyDefense = ['head', 'torso', 'legs'];
     enemy.defense = enemyDefense[Math.floor(Math.random() * 3)];
+    if (this.offense !== '') {
+      if (this.offense == enemy.defense) {
+        const reducredHit = (hitStrength /= 3);
+        hitMessage = `${enemy.name} blocked ${this.name}'s strike to the ${
+          enemy.defense
+        } and reduced its impact to ${reducredHit.toFixed(0)}`;
 
-    if (this.offense == enemy.defense) {
-      console.log('cpu blocked');
-      hitStrength /= 3;
-
-      enemy.hp -= hitStrength.toFixed(0);
-      // enemy.hp -= hitStrength.toFixed(0);
-    } else {
-      // console.log(hitStrength);
-      enemy.hp -= hitStrength;
+        enemy.hp -= hitStrength.toFixed(0);
+      } else {
+        enemy.hp -= hitStrength;
+        hitMessage = `${this.name} hit ${enemy.name} to deal ${hitStrength} damage in the ${this.offense}`;
+      }
+      console.log(enemy.hp, enemy.name, hitStrength);
     }
-    console.log(enemy.hp);
+
+    const message = document.createElement('div');
+    message.classList.add('message-block');
+    message.innerText = hitMessage;
+    document.getElementById('move-log').appendChild(message);
   }
   defend() {}
   castSpell(spells) {}
@@ -127,7 +154,7 @@ class Hero extends FightingUnit {
     this.abilities = [];
     this.inventory = [];
     this.coins = [];
-    this.ap = 190 + this.lvl * 10;
+    this.ap = 150 + this.lvl * 10;
   }
   rest() {
     this.hp = this.str * 20;
@@ -158,10 +185,8 @@ const startFight = (hero, enemy) => {
   let currentTarget = [];
   let typeOfAttack = [];
   let currentDefense = [];
-
-  const bodyParts = ['head', 'torso', 'legs'];
-
-  const bodyPartChoice = () => {
+  fightInProgress = true;
+  if (fightInProgress && haveWinner == false) {
     const calculateApCost = () => {
       let totalApCost = 0;
       // returns sum of every selection that doesn't have passive class
@@ -178,83 +203,81 @@ const startFight = (hero, enemy) => {
       } else {
         apUsedMessage.style.color = 'black';
       }
-      console.log(totalApCost);
+
       return totalApCost;
     };
-    // Detect passive and active selections
-    everyBattleOption.forEach((e) => {
-      e.addEventListener('change', () => {
-        for (let i = 0; i < e.length; i++) {
-          if (e.value == 'normal-attack') {
-            e[1].classList.remove('passive');
-            e[2].classList.add('passive');
-            // console.log(e.value, 'normal+');
-          } else if (e.value == 'heavy-attack') {
-            e[2].classList.remove('passive');
-            e[1].classList.add('passive');
-            // console.log(e.value, 'heavy+');
-          } else if (e.value == 'off') {
-            // console.log(e.value, 'empty+');
-            e[1].classList.add('passive');
-            e[2].classList.add('passive');
-          } else if (e.value == 'defend') {
-            e[1].classList.remove('passive');
-          } else if (e.value == 'def') {
-            e[1].classList.add('passive');
-          }
-        }
-        calculateApCost(everyBattleOption);
-      });
-    });
-    // Detect targeted body parts
-    everyBattleOption.forEach((e) => {
-      e.addEventListener('change', () => {
-        for (let i = 0; i < 3; i++) {
-          if (everyBattleOption[i].value !== 'off') {
-            // console.log(everyBattleOption[i]);
-            everyBattleOption[i].classList.add('targeted');
-          } else {
-            everyBattleOption[i].classList.remove('targeted');
-          }
-          // console.log(everyBattleOption[i].value);
-        }
-        for (let i = 3; i < 6; i++) {
-          if (everyBattleOption[i].value !== 'def') {
-            // console.log(everyBattleOption[i].getAttribute('id'));
-            everyBattleOption[i].classList.add('defended');
-          } else {
-            everyBattleOption[i].classList.remove('defended');
-          }
-        }
-      });
-    });
-    // Check for targeted and defended body parts and push them to the array
-  };
 
-  makeMove.addEventListener('click', () => {
-    // Extract ap cost fron apUsedMessage
-    const getNum = (str) => {
-      let newStr = '';
-      for (let i = 0; i < str.length - 4; i++) {
-        if (!isNaN(str[i]) && isFinite(str[i])) {
-          newStr += str[i];
-        }
-      }
-
-      return parseInt(newStr);
+    const bodyPartChoice = () => {
+      // Detect passive and active selections
+      everyBattleOption.forEach((e) => {
+        e.addEventListener('change', () => {
+          for (let i = 0; i < e.length; i++) {
+            if (e.value == 'normal-attack') {
+              e[1].classList.remove('passive');
+              e[2].classList.add('passive');
+              // console.log(e.value, 'normal+');
+            } else if (e.value == 'heavy-attack') {
+              e[2].classList.remove('passive');
+              e[1].classList.add('passive');
+              // console.log(e.value, 'heavy+');
+            } else if (e.value == 'off') {
+              // console.log(e.value, 'empty+');
+              e[1].classList.add('passive');
+              e[2].classList.add('passive');
+            } else if (e.value == 'defend') {
+              e[1].classList.remove('passive');
+            } else if (e.value == 'def') {
+              e[1].classList.add('passive');
+            }
+          }
+          calculateApCost(everyBattleOption);
+        });
+      });
+      // Detect targeted body parts
+      everyBattleOption.forEach((e) => {
+        e.addEventListener('change', () => {
+          for (let i = 0; i < 3; i++) {
+            if (everyBattleOption[i].value !== 'off') {
+              everyBattleOption[i].classList.add('targeted');
+            } else {
+              everyBattleOption[i].classList.remove('targeted');
+            }
+          }
+          for (let i = 3; i < 6; i++) {
+            if (everyBattleOption[i].value !== 'def') {
+              everyBattleOption[i].classList.add('defended');
+            } else {
+              everyBattleOption[i].classList.remove('defended');
+            }
+          }
+        });
+      });
+      // Check for targeted and defended body parts and push them to the array
     };
-    const apUsed = getNum(apUsedMessage.textContent);
-    if (apUsed < hero.ap) {
-      for (let i = 0; i < 6; i++) {
-        if (everyBattleOption[i].classList.contains('targeted')) {
-          currentTarget.push(everyBattleOption[i].getAttribute('id'));
-        } else if (everyBattleOption[i].classList.contains('defended')) {
-          currentDefense.push(everyBattleOption[i].getAttribute('id'));
+
+    makeMove.addEventListener('click', () => {
+      // Extract ap cost fron apUsedMessage
+      const getNum = (str) => {
+        let newStr = '';
+        for (let i = 0; i < str.length - 4; i++) {
+          if (!isNaN(str[i]) && isFinite(str[i])) {
+            newStr += str[i];
+          }
+        }
+
+        return parseInt(newStr);
+      };
+      const apUsed = getNum(apUsedMessage.textContent);
+      if (apUsed < hero.ap) {
+        for (let i = 0; i < 6; i++) {
+          if (everyBattleOption[i].classList.contains('targeted')) {
+            currentTarget.push(everyBattleOption[i].getAttribute('id'));
+          } else if (everyBattleOption[i].classList.contains('defended')) {
+            currentDefense.push(everyBattleOption[i].getAttribute('id'));
+          }
         }
       }
-    }
-    // Target and deal damage to enemy
-    if (hero.int >= enemy.int) {
+      // Target and deal damage to enemy
       if (currentTarget.includes('head-attack')) {
         if (everyBattleOption[0][1].classList.length == 0) {
           typeOfAttack.push(everyBattleOption[0][1].value);
@@ -276,18 +299,63 @@ const startFight = (hero, enemy) => {
           typeOfAttack.push(everyBattleOption[2][2].value);
         }
       }
-      hero.attack(enemy, currentTarget, typeOfAttack, currentDefense);
-      enemy.attackCPU(hero);
-    }
+      // Winning conditions
+      const check4Winner = () => {
+        if (enemy.hp <= 0) {
+          fightInProgress = false;
+          haveWinner = true;
+          console.log('Hero is victorious');
+        } else if (hero.hp <= 0) {
+          fightInProgress = false;
+          haveWinner = true;
+          console.log(`${enemy.name} is victorious`);
+        }
+      };
+      if (hero.int > enemy.int) {
+        hero.attack(enemy, currentTarget, typeOfAttack, currentDefense);
+        check4Winner();
+        enemy.attackCPU(hero);
+        check4Winner();
+      } else {
+        enemy.attackCPU(hero);
+        check4Winner();
+        hero.attack(enemy, currentTarget, typeOfAttack, currentDefense);
+        check4Winner();
+      }
+      hero.offense = '';
+      // Reset the game selection and AP cost
+      for (let i = 0; i < 3; i++) {
+        everyBattleOption[i].value = 'off';
+      }
+      for (let i = 3; i < 6; i++) {
+        everyBattleOption[i].value = 'def';
+      }
+      for (let i = 1; i < 4; i++) {
+        document
+          .getElementById('attack-bodyparts')
+          .children[i].classList.remove('targeted');
+      }
+      for (let i = 0; i < 3; i++) {
+        for (let n = 0; n < 3; n++) {
+          everyBattleOption[i][n].classList.add('passive');
+        }
+      }
+      for (let i = 3; i < 6; i++) {
+        for (let n = 0; n < 2; n++) {
+          everyBattleOption[i][n].classList.add('passive');
+        }
+      }
+      calculateApCost(everyBattleOption);
+      currentTarget = [];
+      typeOfAttack = [];
+      currentDefense = [];
+      fightTurn++;
+    });
+    bodyPartChoice();
 
-    // console.log(apUsed);
-    // console.log(currentTarget);
-    // console.log(currentDefense);
-  });
-  bodyPartChoice();
-
-  console.log(hero.name, hero.hp);
-  console.log(enemy.name, enemy.hp);
+    console.log(hero.name, hero.hp);
+    console.log(enemy.name, enemy.hp);
+  }
 };
 
 startFight(hero1, unit1);
