@@ -46,6 +46,7 @@ margin: 10px auto;
 #fight-ui {
   display: flex;
   flex-direction: column;
+  visibility: hidden;
 }
 
 #ap-used {
@@ -74,4 +75,26 @@ margin: 10px auto;
   margin-left: 20px;
   padding: 5px;
 
+}
+
+#battle-over {
+  width: 720px;
+  background-image: url('images/log-background.png');
+  height: 443px;
+  position: fixed;
+  left: 28%;
+  margin: 10px;
+  visibility: hidden;
+}
+
+#over {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 50px;
+}
+
+#declare-winner {
+  text-align: center;
+  margin-top: 80px;
+  font-size: 30px;
 }

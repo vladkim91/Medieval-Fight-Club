@@ -13,7 +13,7 @@
   <title>Medieval Fight Club</title>
 </head>
 <body>
-  <div id="fight-ui" class="hidden">
+  <div id="fight-ui">
     <form id="pick-bodyparts">
       <div id="attack-bodyparts">
         <p class="label attack">Attack</p>
@@ -53,12 +53,13 @@
     </form>
     <p id="ap-used">Action points used: 0</p>
     <input type="button" id="submit-choice" value="Make your move!">
+    <div id="battle-over">
+      <h3 id="over">Battle is over</h3>
+      <div id="declare-winner"></div>
+    </div>
     <div id="fight-log">
       <h3 id="log">Battle Log</h3>
-      <div id="move-log">
- 
-
-      </div>
+      <div id="move-log"></div>
     </div>
   </div>
   <script src="script.js"></script>
