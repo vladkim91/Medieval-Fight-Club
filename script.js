@@ -40,12 +40,43 @@ class FightingUnit {
     } else {
       hitStrength += this.str + this.wp.damage;
     }
+    if (target.length == 1) {
+      if (target[0] == 'head-attack') {
+        this.offense = 'head';
+        if (type[0] == 'normal-attack') {
+          hitStrength = hitStrength;
+        } else {
+          hitStrength = hitStrength * 1.4;
+          hitStrength = parseInt(hitStrength.toFixed(0));
+        }
+      }
+      if (target[0] == 'torso-attack') {
+        this.offense = 'torso';
+        if (type[0] == 'normal-attack') {
+          hitStrength = hitStrength;
+        } else {
+          hitStrength = hitStrength * 1.4;
+          hitStrength = parseInt(hitStrength.toFixed(0));
+        }
+      }
+      if (target[0] == 'leg-attack') {
+        this.offense = 'legs';
+        if (type[0] == 'normal-attack') {
+          hitStrength = hitStrength;
+        } else {
+          hitStrength = hitStrength * 1.4;
+          hitStrength = parseInt(hitStrength.toFixed(0));
+        }
+      }
+      console.log(this.offense, hitStrength);
+    }
+
     if (this.offense == enemy.defense) {
       hitStrength /= 3;
-      enemy.hp -= hitStrength.toFixed(0);
+      // enemy.hp -= hitStrength.toFixed(0);
     } else {
       // console.log(hitStrength);
-      enemy.hp -= hitStrength.toFixed(0);
+      // enemy.hp -= hitStrength.toFixed(0);
     }
   }
   defend() {}
@@ -209,10 +240,10 @@ const startFight = (hero, enemy) => {
           typeOfAttack.push(everyBattleOption[2][2].value);
         }
       }
-      hero.attack(enemy, currentTarget, typeOfAttack);
+      hero.attack(enemy, currentTarget, typeOfAttack, currentDefense);
 
-      console.log(typeOfAttack);
       console.log(currentTarget);
+      console.log(typeOfAttack);
       console.log(currentDefense);
     }
 
