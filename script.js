@@ -187,6 +187,7 @@ const boss1 = new Boss();
 
 const startFight = (hero, enemy) => {
   document.getElementById('fight-ui').style.visibility = 'visible';
+  document.body.style.flexDirection = 'column-reverse';
   // Choose body part => attack / defend => check if hp < 0 => declare winner
   let fightTurn = 1;
   let haveWinner = false;
@@ -371,7 +372,6 @@ const startFight = (hero, enemy) => {
     });
     bodyPartChoice();
   } else {
-    sandBox.pop();
   }
 };
 
@@ -379,10 +379,12 @@ battleOverScreen.addEventListener('click', () => {
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
+  document.body.style.flexDirection = 'column';
   sandBox.pop();
 });
 unit1.str += 200;
 unit1.int += 10;
+
 const sandBox = [hero1, unit1];
 
 startFight(...sandBox);

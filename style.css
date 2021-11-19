@@ -1,6 +1,23 @@
+
 * {
   font-family: 'MedievalSharp', cursive;
   margin: 0;
+ 
+}
+
+body {
+  background-color: rgb(85, 85, 85);
+  display:flex;
+  flex-direction: column;
+}
+
+#player-ui {
+  background-image: url('images/inside.jpg');
+  background-repeat: no-repeat;
+  width: 80%;
+  height: 1000px;
+  margin: 20px 7%;
+   
 }
 
 #pick-bodyparts {
@@ -20,6 +37,7 @@
 .label{
   margin: 10px auto;
   font-size: 40px;
+  color: white;
 }
 
 #attack-bodyparts select, #defend-bodyparts select {
@@ -29,6 +47,8 @@
   border: rgb(139, 119, 0) solid 3px;
   border-radius: 4px;
   border-style: outset;
+  background-color: rgb(85, 85, 85);;
+  color: white;
 }
 
 #submit-choice {
@@ -47,10 +67,14 @@ margin: 10px auto;
   display: flex;
   flex-direction: column;
   visibility: hidden;
+  width: 75%;
+  border: solid black 20px;
+  margin: 0 auto
 }
 
 #ap-used {
   text-align: center;
+  color: white
 }
 
 #fight-log {
@@ -98,3 +122,4 @@ margin: 10px auto;
   margin-top: 80px;
   font-size: 30px;
 }
+
