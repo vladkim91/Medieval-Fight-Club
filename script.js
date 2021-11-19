@@ -166,6 +166,7 @@ class Hero extends FightingUnit {
     this.hp = this.str * 20;
   }
   collectLoot() {}
+  equip(item) {}
 }
 
 class Boss extends FightingUnit {
@@ -178,10 +179,69 @@ class Boss extends FightingUnit {
   dropLoot() {}
 }
 
+class Equipment {
+  constructor(
+    defense,
+    damage,
+    price,
+    minLvl,
+    durability,
+    str,
+    agl,
+    int,
+    lck,
+    accuracy,
+    toughness,
+    evasion,
+    crush,
+    spell,
+    type,
+    url
+  ) {
+    this.defense = defense;
+    this.damage = damage;
+    this.price = price;
+    this.minLvl = minLvl;
+    this.durability = durability;
+    this.str = str;
+    this.agl = agl;
+    this.int = int;
+    this.lck = lck;
+    this.accuracy = accuracy;
+    this.toughness = toughness;
+    this.evasion = evasion;
+    this.crush = crush;
+    this.spell = spell;
+    this.type = type;
+    this.url = url;
+  }
+}
+
 const unit1 = new FightingUnit(1, 'Peasant1');
 const unit2 = new FightingUnit(2, 'Peasant2');
 const hero1 = new Hero(9, 'Blademaster');
 const boss1 = new Boss();
+const sword1 = new Equipment(
+  0,
+  15,
+  100,
+  1,
+  100,
+  3,
+  1,
+  0,
+  1,
+  10,
+  10,
+  0,
+  10,
+  0,
+  'sword',
+  'images/sword1.png'
+);
+
+hero1.inventory.push(sword1);
+console.log(hero1.inventory[0]);
 
 // Event Listners
 
