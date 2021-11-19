@@ -33,6 +33,28 @@ class FightingUnit {
     this.hp = this.str * 20;
     this.mp = this.int * 10;
   }
+  attackCPU(hero) {
+    let hitStrength = 0;
+    if (this.wp !== {}) {
+      hitStrength += this.str;
+    } else {
+      hitStrength += this.str + this.wp.damage;
+    }
+    let enemyAttack = ['head', 'torso', 'legs'];
+    this.offense = enemyAttack[Math.floor(Math.random() * 3)];
+    if (this.offense == hero.defense) {
+      console.log('hero blocked');
+      hitStrength /= 3;
+
+      hero.hp -= hitStrength.toFixed(0);
+      // enemy.hp -= hitStrength.toFixed(0);
+    } else {
+      // console.log(hitStrength);
+      hero.hp -= hitStrength;
+    }
+    console.log(hero.hp, hero.name);
+  }
+
   attack(enemy, target, type, defense) {
     let hitStrength = 0;
     if (this.wp !== {}) {
@@ -40,44 +62,58 @@ class FightingUnit {
     } else {
       hitStrength += this.str + this.wp.damage;
     }
-    if (target.length == 1) {
-      if (target[0] == 'head-attack') {
-        this.offense = 'head';
-        if (type[0] == 'normal-attack') {
-          hitStrength = hitStrength;
-        } else {
-          hitStrength = hitStrength * 1.4;
-          hitStrength = parseInt(hitStrength.toFixed(0));
-        }
+
+    if (target[0] == 'head-attack') {
+      this.offense = 'head';
+      if (type[0] == 'normal-attack') {
+        hitStrength = hitStrength;
+      } else {
+        hitStrength = hitStrength * 1.4;
+        hitStrength = parseInt(hitStrength.toFixed(0));
       }
-      if (target[0] == 'torso-attack') {
-        this.offense = 'torso';
-        if (type[0] == 'normal-attack') {
-          hitStrength = hitStrength;
-        } else {
-          hitStrength = hitStrength * 1.4;
-          hitStrength = parseInt(hitStrength.toFixed(0));
-        }
+    }
+    if (target[0] == 'torso-attack') {
+      this.offense = 'torso';
+      if (type[0] == 'normal-attack') {
+        hitStrength = hitStrength;
+      } else {
+        hitStrength = hitStrength * 1.4;
+        hitStrength = parseInt(hitStrength.toFixed(0));
       }
-      if (target[0] == 'leg-attack') {
-        this.offense = 'legs';
-        if (type[0] == 'normal-attack') {
-          hitStrength = hitStrength;
-        } else {
-          hitStrength = hitStrength * 1.4;
-          hitStrength = parseInt(hitStrength.toFixed(0));
-        }
+    }
+    if (target[0] == 'leg-attack') {
+      this.offense = 'legs';
+      if (type[0] == 'normal-attack') {
+        hitStrength = hitStrength;
+      } else {
+        hitStrength = hitStrength * 1.4;
+        hitStrength = parseInt(hitStrength.toFixed(0));
       }
-      console.log(this.offense, hitStrength);
+    }
+    if (defense[0] == 'head-defend') {
+      this.defense = 'head';
+    } else if (defense[0] == 'torso-defend') {
+      this.defense = 'torso';
+    } else if (defense[0] == 'leg-defend') {
+      this.defense = 'legs';
     }
 
+    console.log(this.offense, hitStrength);
+    // Enemy defense
+    const enemyDefense = ['head', 'torso', 'legs'];
+    enemy.defense = enemyDefense[Math.floor(Math.random() * 3)];
+
     if (this.offense == enemy.defense) {
+      console.log('cpu blocked');
       hitStrength /= 3;
+
+      enemy.hp -= hitStrength.toFixed(0);
       // enemy.hp -= hitStrength.toFixed(0);
     } else {
       // console.log(hitStrength);
-      // enemy.hp -= hitStrength.toFixed(0);
+      enemy.hp -= hitStrength;
     }
+    console.log(enemy.hp);
   }
   defend() {}
   castSpell(spells) {}
@@ -241,10 +277,7 @@ const startFight = (hero, enemy) => {
         }
       }
       hero.attack(enemy, currentTarget, typeOfAttack, currentDefense);
-
-      console.log(currentTarget);
-      console.log(typeOfAttack);
-      console.log(currentDefense);
+      enemy.attackCPU(hero);
     }
 
     // console.log(apUsed);
