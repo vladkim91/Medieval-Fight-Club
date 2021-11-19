@@ -5,55 +5,9 @@ const legAttack = document.getElementById('leg-attack');
 const headDefend = document.getElementById('head-defend');
 const torsoDefend = document.getElementById('torso-defend');
 const legDefend = document.getElementById('leg-defend');
-
 const apUsedMessage = document.getElementById('ap-used');
+const makeMove = document.getElementById('submit-choice');
 
-const everyAttackOption = [
-  headAttack,
-  torsoAttack,
-  legAttack,
-  headDefend,
-  torsoDefend,
-  legDefend
-];
-
-const calculateApCost = () => {
-  let totalApCost = 0;
-  for (let i = 0; i < everyAttackOption.length; i++) {
-    for (let n = 0; n < everyAttackOption[i].length; n++) {
-      if (!everyAttackOption[i][n].classList.contains('passive')) {
-        totalApCost += parseInt(everyAttackOption[i][n].dataset.apcost);
-      }
-    }
-  }
-  console.log(totalApCost);
-  return totalApCost;
-};
-
-everyAttackOption.forEach((e) => {
-  e.addEventListener('change', () => {
-    for (let i = 0; i < e.length; i++) {
-      if (e.value == 'normal-attack') {
-        e[1].classList.remove('passive');
-        e[2].classList.add('passive');
-        console.log(e.value, 'normal+');
-      } else if (e.value == 'heavy-attack') {
-        e[2].classList.remove('passive');
-        e[1].classList.add('passive');
-        console.log(e.value, 'heavy+');
-      } else if (e.value == 'off') {
-        console.log(e.value, 'empty+');
-        e[1].classList.add('passive');
-        e[2].classList.add('passive');
-      } else if (e.value == 'defend') {
-        e[1].classList.remove('passive');
-      } else if (e.value == 'def') {
-        e[1].classList.add('passive');
-      }
-    }
-    calculateApCost(everyAttackOption);
-  });
-});
 let fightInProgress = false;
 // Classes
 
@@ -126,14 +80,85 @@ const startFight = (hero, enemy) => {
   // Choose body part => attack / defend => check if hp < 0 => declare winner
   let fightTurn = 1;
   let haveWinner = false;
+  let currentTarget = [];
+  let currentDefense;
 
   const bodyParts = ['head', 'torso', 'legs'];
+
   const bodyPartChoice = (unit, arr) => {
-    unit.offense = arr[0];
-    unit.defense = arr[0];
+    const everyBattleOption = [
+      headAttack,
+      torsoAttack,
+      legAttack,
+      headDefend,
+      torsoDefend,
+      legDefend
+    ];
+
+    const calculateApCost = () => {
+      let totalApCost = 0;
+
+      for (let i = 0; i < everyBattleOption.length; i++) {
+        for (let n = 0; n < everyBattleOption[i].length; n++) {
+          if (!everyBattleOption[i][n].classList.contains('passive')) {
+            totalApCost += parseInt(everyBattleOption[i][n].dataset.apcost);
+          }
+        }
+      }
+      apUsedMessage.innerText = `Action points used: ${totalApCost}`;
+      console.log(totalApCost);
+      return totalApCost;
+    };
+
+    everyBattleOption.forEach((e) => {
+      e.addEventListener('change', () => {
+        for (let i = 0; i < e.length; i++) {
+          if (e.value == 'normal-attack') {
+            e[1].classList.remove('passive');
+            e[2].classList.add('passive');
+            // console.log(e.value, 'normal+');
+          } else if (e.value == 'heavy-attack') {
+            e[2].classList.remove('passive');
+            e[1].classList.add('passive');
+            // console.log(e.value, 'heavy+');
+          } else if (e.value == 'off') {
+            // console.log(e.value, 'empty+');
+            e[1].classList.add('passive');
+            e[2].classList.add('passive');
+          } else if (e.value == 'defend') {
+            e[1].classList.remove('passive');
+          } else if (e.value == 'def') {
+            e[1].classList.add('passive');
+          }
+        }
+        calculateApCost(everyBattleOption);
+      });
+    });
+
+    everyBattleOption.forEach((e) => {
+      e.addEventListener('change', () => {
+        for (let i = 0; i < 3; i++) {
+          if (everyBattleOption[i].value !== 'off') {
+            console.log(everyBattleOption[i]);
+            everyBattleOption[i].classList.add('targeted');
+          } else {
+            everyBattleOption[i].classList.remove('targeted');
+          }
+          // console.log(everyBattleOption[i].value);
+        }
+        for (let i = 3; i < 6; i++) {
+          if (everyBattleOption[i].value !== 'def') {
+            console.log(everyBattleOption[i].getAttribute('id'));
+            everyBattleOption[i].classList.add('defended');
+          } else {
+            everyBattleOption[i].classList.remove('defended');
+          }
+        }
+      });
+    });
   };
+
   bodyPartChoice(hero, bodyParts);
-  bodyPartChoice(enemy, bodyParts);
 
   if (hero.int >= enemy.int) {
     hero.attack(enemy);

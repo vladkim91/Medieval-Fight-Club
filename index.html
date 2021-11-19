@@ -13,22 +13,22 @@
   <title>Medieval Fight Club</title>
 </head>
 <body>
-  <div id="fight-ui">
+  <div id="fight-ui" class="hidden">
     <form id="pick-bodyparts">
       <div id="attack-bodyparts">
         <p class="label attack">Attack</p>
         <select id="head-attack">
-          <option value="off"data-apcost="0" class="">select one</option>
+          <option value="off"data-apcost="0" class="passive">select one</option>
           <option value="normal-attack" data-apcost="60" class="passive" >Regular attack (60)</option>
           <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
         </select>
         <select id="torso-attack">
-          <option value="off"data-apcost="0" class="">select one</option>
+          <option value="off"data-apcost="0" class="passive">select one</option>
           <option value="normal-attack" data-apcost="60" class="passive">Regular attack (60)</option>
           <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
         </select>
         <select id="leg-attack">
-          <option value="off"data-apcost="0" class="">select one</option>
+          <option value="off"data-apcost="0" class="passive">select one</option>
           <option value="normal-attack" data-apcost="60" class="passive">Regular attack (60)</option>
           <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
         </select>
@@ -36,15 +36,15 @@
       <div id="defend-bodyparts">
         <p class="label defend">Defend</p>
         <select id="head-defend">
-          <option value="def" data-apcost="0" class="">select one</option>
+          <option value="def" data-apcost="0" class="passive">select one</option>
           <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
         </select>
         <select id="torso-defend">
-          <option value="def"data-apcost="0" class="">select one</option>
+          <option value="def"data-apcost="0" class="passive">select one</option>
           <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
         </select>
         <select id="leg-defend">
-          <option value="def"data-apcost="0" class="">select one</option>
+          <option value="def"data-apcost="0" class="passive">select one</option>
           <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
         </select>
       </div>
