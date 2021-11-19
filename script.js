@@ -89,11 +89,12 @@ const startFight = (hero, enemy) => {
   let fightTurn = 1;
   let haveWinner = false;
   let currentTarget = [];
-  let currentDefense;
+  let typeOfAttack = [];
+  let currentDefense = [];
 
   const bodyParts = ['head', 'torso', 'legs'];
 
-  const bodyPartChoice = (unit, arr) => {
+  const bodyPartChoice = () => {
     const calculateApCost = () => {
       let totalApCost = 0;
       // returns sum of every selection that doesn't have passive class
@@ -104,7 +105,7 @@ const startFight = (hero, enemy) => {
           }
         }
       }
-      apUsedMessage.innerText = `Action points used: ${totalApCost}`;
+      apUsedMessage.innerText = `Action points used: ${totalApCost}/${hero.ap}`;
       if (totalApCost > hero.ap) {
         apUsedMessage.style.color = 'red';
       } else {
@@ -164,11 +165,11 @@ const startFight = (hero, enemy) => {
   };
 
   makeMove.addEventListener('click', () => {
+    // Extract ap cost fron apUsedMessage
     const getNum = (str) => {
       let newStr = '';
-      for (let i = 0; i < str.length; i++) {
+      for (let i = 0; i < str.length - 4; i++) {
         if (!isNaN(str[i]) && isFinite(str[i])) {
-          console.log(str[i]);
           newStr += str[i];
         }
       }
@@ -180,23 +181,47 @@ const startFight = (hero, enemy) => {
       for (let i = 0; i < 6; i++) {
         if (everyBattleOption[i].classList.contains('targeted')) {
           currentTarget.push(everyBattleOption[i].getAttribute('id'));
+        } else if (everyBattleOption[i].classList.contains('defended')) {
+          currentDefense.push(everyBattleOption[i].getAttribute('id'));
         }
       }
     }
-    console.log(apUsed);
+    // Target and deal damage to enemy
+    if (hero.int >= enemy.int) {
+      if (currentTarget.includes('head-attack')) {
+        if (everyBattleOption[0][1].classList.length == 0) {
+          typeOfAttack.push(everyBattleOption[0][1].value);
+        } else if (everyBattleOption[0][2].classList.length == 0) {
+          typeOfAttack.push(everyBattleOption[0][2].value);
+        }
+      }
+      if (currentTarget.includes('torso-attack')) {
+        if (everyBattleOption[1][1].classList.length == 0) {
+          typeOfAttack.push(everyBattleOption[1][1].value);
+        } else if (everyBattleOption[1][2].classList.length == 0) {
+          typeOfAttack.push(everyBattleOption[1][2].value);
+        }
+      }
+      if (currentTarget.includes('leg-attack')) {
+        if (everyBattleOption[2][1].classList.length == 0) {
+          typeOfAttack.push(everyBattleOption[2][1].value);
+        } else if (everyBattleOption[2][2].classList.length == 0) {
+          typeOfAttack.push(everyBattleOption[2][2].value);
+        }
+      }
+
+      console.log(typeOfAttack);
+      console.log(currentTarget);
+    }
+
+    // console.log(apUsed);
+    // console.log(currentTarget);
+    // console.log(currentDefense);
   });
-
-  bodyPartChoice(hero, bodyParts);
-
-  if (hero.int >= enemy.int) {
-    hero.attack(enemy);
-    enemy.attack(hero);
-  }
+  bodyPartChoice();
 
   console.log(hero.name, hero.hp);
   console.log(enemy.name, enemy.hp);
 };
 
 startFight(hero1, unit1);
-
-// Extract ap cost fron apUsedMessage
