@@ -7,6 +7,14 @@ const torsoDefend = document.getElementById('torso-defend');
 const legDefend = document.getElementById('leg-defend');
 const apUsedMessage = document.getElementById('ap-used');
 const makeMove = document.getElementById('submit-choice');
+const everyBattleOption = [
+  headAttack,
+  torsoAttack,
+  legAttack,
+  headDefend,
+  torsoDefend,
+  legDefend
+];
 
 let fightInProgress = false;
 // Classes
@@ -86,18 +94,9 @@ const startFight = (hero, enemy) => {
   const bodyParts = ['head', 'torso', 'legs'];
 
   const bodyPartChoice = (unit, arr) => {
-    const everyBattleOption = [
-      headAttack,
-      torsoAttack,
-      legAttack,
-      headDefend,
-      torsoDefend,
-      legDefend
-    ];
-
     const calculateApCost = () => {
       let totalApCost = 0;
-
+      // returns sum of every selection that doesn't have passive class
       for (let i = 0; i < everyBattleOption.length; i++) {
         for (let n = 0; n < everyBattleOption[i].length; n++) {
           if (!everyBattleOption[i][n].classList.contains('passive')) {
@@ -106,10 +105,15 @@ const startFight = (hero, enemy) => {
         }
       }
       apUsedMessage.innerText = `Action points used: ${totalApCost}`;
+      if (totalApCost > hero.ap) {
+        apUsedMessage.style.color = 'red';
+      } else {
+        apUsedMessage.style.color = 'black';
+      }
       console.log(totalApCost);
       return totalApCost;
     };
-
+    // Detect passive and active selections
     everyBattleOption.forEach((e) => {
       e.addEventListener('change', () => {
         for (let i = 0; i < e.length; i++) {
@@ -134,12 +138,12 @@ const startFight = (hero, enemy) => {
         calculateApCost(everyBattleOption);
       });
     });
-
+    // Detect targeted body parts
     everyBattleOption.forEach((e) => {
       e.addEventListener('change', () => {
         for (let i = 0; i < 3; i++) {
           if (everyBattleOption[i].value !== 'off') {
-            console.log(everyBattleOption[i]);
+            // console.log(everyBattleOption[i]);
             everyBattleOption[i].classList.add('targeted');
           } else {
             everyBattleOption[i].classList.remove('targeted');
@@ -148,7 +152,7 @@ const startFight = (hero, enemy) => {
         }
         for (let i = 3; i < 6; i++) {
           if (everyBattleOption[i].value !== 'def') {
-            console.log(everyBattleOption[i].getAttribute('id'));
+            // console.log(everyBattleOption[i].getAttribute('id'));
             everyBattleOption[i].classList.add('defended');
           } else {
             everyBattleOption[i].classList.remove('defended');
@@ -156,7 +160,31 @@ const startFight = (hero, enemy) => {
         }
       });
     });
+    // Check for targeted and defended body parts and push them to the array
   };
+
+  makeMove.addEventListener('click', () => {
+    const getNum = (str) => {
+      let newStr = '';
+      for (let i = 0; i < str.length; i++) {
+        if (!isNaN(str[i]) && isFinite(str[i])) {
+          console.log(str[i]);
+          newStr += str[i];
+        }
+      }
+
+      return parseInt(newStr);
+    };
+    const apUsed = getNum(apUsedMessage.textContent);
+    if (apUsed < hero.ap) {
+      for (let i = 0; i < 6; i++) {
+        if (everyBattleOption[i].classList.contains('targeted')) {
+          currentTarget.push(everyBattleOption[i].getAttribute('id'));
+        }
+      }
+    }
+    console.log(apUsed);
+  });
 
   bodyPartChoice(hero, bodyParts);
 
@@ -170,3 +198,5 @@ const startFight = (hero, enemy) => {
 };
 
 startFight(hero1, unit1);
+
+// Extract ap cost fron apUsedMessage
