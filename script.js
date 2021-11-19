@@ -186,6 +186,10 @@ const boss1 = new Boss();
 // Event Listners
 
 const startFight = (hero, enemy) => {
+  document
+    .querySelectorAll('#fighter-box')[1]
+    .children[3].setAttribute('src', 'images/characters/peasant.png');
+  document.querySelector('enemy');
   document.getElementById('fight-ui').style.visibility = 'visible';
   document.body.style.flexDirection = 'column-reverse';
   // Choose body part => attack / defend => check if hp < 0 => declare winner
@@ -374,7 +378,6 @@ const startFight = (hero, enemy) => {
   } else {
   }
 };
-
 battleOverScreen.addEventListener('click', () => {
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
@@ -382,6 +385,7 @@ battleOverScreen.addEventListener('click', () => {
   document.body.style.flexDirection = 'column';
   sandBox.pop();
 });
+
 unit1.str += 200;
 unit1.int += 10;
 

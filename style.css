@@ -123,3 +123,28 @@ margin: 10px auto;
   font-size: 30px;
 }
 
+#fighter-box {
+  width: 250px;
+  height: 450px;
+  background-color: white;
+  display: flex;
+  flex-direction: column; 
+  position: relative;
+  border: black solid 2px;
+  margin: 10px;
+  align-items: center;
+  
+}
+
+#avatar-hp-mp {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: -350px;
+
+}
+
+.avatar {
+  width: auto;
+  height: 350px;
+  margin-top: 20px
+}
