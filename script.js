@@ -9,6 +9,9 @@ const apUsedMessage = document.getElementById('ap-used');
 const makeMove = document.getElementById('submit-choice');
 const declareWinnerMessage = document.getElementById('declare-winner');
 const battleOverScreen = document.getElementById('battle-over');
+const heroBox = document.querySelector('.hero');
+const enemyBox = document.querySelector('.enemy');
+
 const everyBattleOption = [
   headAttack,
   torsoAttack,
@@ -37,7 +40,7 @@ class FightingUnit {
     this.mp = this.int * 10;
     this.maxHp = this.hp;
   }
-  attackCPU(hero) {
+  attackCPU(target) {
     let hitStrength = 0;
     let hitMessage = '';
 
@@ -52,33 +55,35 @@ class FightingUnit {
 
     let enemyAttack = ['head', 'torso', 'legs'];
     this.offense = enemyAttack[Math.floor(Math.random() * 3)];
-    if (this.offense == hero.defense) {
+    if (this.offense == target.defense) {
       const reducredHit = (hitStrength /= 3);
-      hitMessage = `${hero.name} blocked ${this.name}'s strike to the ${
-        hero.defense
+      hitMessage = `${target.name} blocked ${this.name}'s strike to the ${
+        target.defense
       } and reduced its impact to ${reducredHit.toFixed(0)}`;
 
-      hero.hp -= hitStrength.toFixed(0);
+      target.hp -= hitStrength.toFixed(0);
     } else {
-      hero.hp -= hitStrength;
-      hitMessage = `${this.name} hit ${hero.name} to deal ${hitStrength} damage in the ${this.offense}`;
+      target.hp -= hitStrength;
+      hitMessage = `${this.name} hit ${
+        target.name
+      } to deal ${hitStrength.toFixed(0)} damage in the ${this.offense}`;
     }
     const generateLogMessage = () => {
       const time = new Date();
       const currentTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
       const message = document.createElement('div');
       message.classList.add('message-block');
-      message.innerText = `${currentTime}: ${hitMessage}. ${hero.name} ${hero.hp}/${hero.maxHp}`;
+      message.innerText = `${currentTime}: ${hitMessage}. ${target.name} ${target.hp}/${target.maxHp}`;
       document.getElementById('move-log').appendChild(message);
     };
     generateLogMessage();
-    console.log(hero.hp, hero.name, hitStrength);
+    console.log(target.hp, target.name, hitStrength);
   }
 
   attack(enemy, target, type, defense) {
     let hitMessage = '';
     let hitStrength = 0;
-
+    if (enemy.hp <= 0) return;
     if (this.wp !== {}) {
       hitStrength += this.str;
     } else {
@@ -148,7 +153,7 @@ class FightingUnit {
     };
     generateLogMessage();
   }
-  defend() {}
+
   castSpell(spells) {}
 }
 
@@ -166,14 +171,16 @@ class Hero extends FightingUnit {
     this.hp = this.str * 20;
   }
   collectLoot() {}
-  equip(item) {}
+  equip(item) {
+    this.wp = this.inventory[0];
+  }
 }
 
 class Boss extends FightingUnit {
   constructor(lvl, name) {
     super(lvl, name);
     this.bossAbilities = [];
-    this.levelReq = 3;
+
     this.ap = 190 + this.lvl * 10;
   }
   dropLoot() {}
@@ -220,7 +227,7 @@ class Equipment {
 const unit1 = new FightingUnit(1, 'Peasant1');
 const unit2 = new FightingUnit(2, 'Peasant2');
 const hero1 = new Hero(9, 'Blademaster');
-const boss1 = new Boss();
+const boss1 = new Boss(10, 'Bloodmage');
 const sword1 = new Equipment(
   0,
   15,
@@ -239,13 +246,41 @@ const sword1 = new Equipment(
   'sword',
   'images/sword1.png'
 );
+const sandBox = [hero1, unit2, unit1, boss1];
 
 hero1.inventory.push(sword1);
 console.log(hero1.inventory[0]);
+// Winning conditions
+const check4Winner = (hero, enemy) => {
+  let winner;
+  console.log(hero);
+  if (enemy.hp <= 0) {
+    battleOverScreen.style.visibility = 'visible';
+    fightInProgress = false;
+    haveWinner = true;
+
+    winner = hero.name;
+    declareWinnerMessage.innerText = `${hero.name} is victorious`;
+  } else if (hero.hp <= 0) {
+    battleOverScreen.style.visibility = 'visible';
+    fightInProgress = false;
+    haveWinner = true;
+    winner = enemy.name;
+    declareWinnerMessage.innerText = `${enemy.name} is victorious`;
+  }
+  return winner;
+};
 
 // Event Listners
+const updateHP = (hero, enemy) => {
+  heroBox.children[0].innerText = hero.name;
+  enemyBox.children[0].innerText = enemy[1].name;
+  heroBox.children[1].innerText = `${hero.hp}/${hero.maxHp}`;
+  enemyBox.children[1].innerText = `${enemy[1].hp}/${enemy[1].maxHp}`;
+};
 
 const startFight = (hero, enemy) => {
+  updateHP(hero1, sandBox);
   document
     .querySelectorAll('#fighter-box')[1]
     .children[3].setAttribute('src', 'images/characters/peasant.png');
@@ -373,37 +408,22 @@ const startFight = (hero, enemy) => {
           typeOfAttack.push(everyBattleOption[2][2].value);
         }
       }
-      // Winning conditions
-      const check4Winner = () => {
-        let winner;
-        if (enemy.hp <= 0) {
-          battleOverScreen.style.visibility = 'visible';
-          fightInProgress = false;
-          haveWinner = true;
-          winner = hero.name;
-          declareWinnerMessage.innerText = `${hero.name} is victorious`;
-        } else if (hero.hp <= 0) {
-          battleOverScreen.style.visibility = 'visible';
-          fightInProgress = false;
-          haveWinner = true;
-          winner = enemy.name;
-          declareWinnerMessage.innerText = `${enemy.name} is victorious`;
-        }
-        return winner;
-      };
-      if (hero.int > enemy.int) {
-        hero.attack(enemy, currentTarget, typeOfAttack, currentDefense);
-        check4Winner();
-        check4Winner() !== hero.name
-          ? (enemy.attackCPU(hero), check4Winner())
+
+      if (hero.int > enemy[1].int) {
+        hero.attack(enemy[1], currentTarget, typeOfAttack, currentDefense);
+
+        check4Winner(hero, enemy[1]) !== hero.name
+          ? (enemy[1].attackCPU(hero), check4Winner(hero, enemy[1]))
           : null;
+        updateHP(hero1, sandBox);
       } else {
-        enemy.attackCPU(hero);
-        check4Winner();
-        check4Winner() !== enemy.name
-          ? (hero.attack(enemy, currentTarget, typeOfAttack, currentDefense),
-            check4Winner())
+        enemy[1].attackCPU(hero);
+
+        check4Winner(hero, enemy[1]) !== enemy[1].name
+          ? (hero.attack(enemy[1], currentTarget, typeOfAttack, currentDefense),
+            check4Winner(hero, enemy[1]))
           : null;
+        updateHP(hero1, sandBox);
       }
       hero.offense = '';
       // Reset the game selection and AP cost
@@ -443,12 +463,16 @@ battleOverScreen.addEventListener('click', () => {
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
   document.body.style.flexDirection = 'column';
-  sandBox.pop();
+  sandBox.splice(1, 1);
+  updateHP(hero1, sandBox);
 });
 
-unit1.str += 200;
+const nextFight = () => {
+  document.getElementById('fight-ui').style.visibility = 'visible';
+  document.body.style.flexDirection = 'column-reverse';
+};
+
 unit1.int += 10;
+hero1.str += 200;
 
-const sandBox = [hero1, unit1];
-
-startFight(...sandBox);
+startFight(hero1, sandBox);
