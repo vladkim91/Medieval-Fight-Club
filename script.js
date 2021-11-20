@@ -18,6 +18,7 @@ const xpUI = document.getElementById('xp');
 const goldUI = document.getElementById('gold');
 const hpUI = document.getElementById('hp');
 const mpUI = document.getElementById('mp');
+const sideBar = document.getElementById('side-bar');
 
 const everyBattleOption = [
   headAttack,
@@ -46,6 +47,7 @@ class FightingUnit {
     this.hp = this.str * 20;
     this.mp = this.int * 10;
     this.maxHp = this.hp;
+    this.maxMP = this.mp;
     this.url = url;
     this.xpBounty = this.lvl * 50;
   }
@@ -262,6 +264,13 @@ const playerUiUpdate = () => {
   lvlUI.innerText = `Level: ${hero1.lvl}`;
   xpUI.innerText = `XP: ${hero1.xp}`;
   goldUI.innerHTML = `Gold: ${hero1.coins}`;
+  sideBar.children[0].innerText = `Hit Points: ${hero1.hp}/${hero1.maxHp}`;
+  sideBar.children[2].innerText = `Mana Points: ${hero1.mp}/${hero1.maxMP}`;
+  const percentageHp = (hero1.hp / hero1.maxHp) * 100;
+  const percentageMp = (hero1.mp / hero1.maxMP) * 100;
+  console.log(percentageHp, percentageMp);
+  sideBar.children[1].style.width = `${percentageHp.toFixed(0)}%`;
+  sideBar.children[3].style.width = `${percentageMp.toFixed(0)}%`;
 };
 
 playerUiUpdate();
@@ -478,9 +487,8 @@ const startFight = (hero, enemy) => {
   }
 };
 battleOverScreen.addEventListener('click', () => {
-  console.log(hero1.xp);
   hero1.xp += sandBox[1].xpBounty;
-  console.log(hero1.xp);
+
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';

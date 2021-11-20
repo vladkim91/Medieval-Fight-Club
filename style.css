@@ -160,3 +160,33 @@ margin: 10px auto;
   align-items: center;
 
 }
+
+#side-bar {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  
+}
+
+.side-bar-indicators {
+  background-color: goldenrod;
+  width: 200px;
+  height: 25px;
+  padding: 10px;
+}
+
+.bar {
+ 
+  height: 5px;
+  border-top: solid black 2px;
+  border-bottom: solid black 2px
+  }
+
+#hp-bar {
+background-color: red;
+width: 100%;
+}
+#mp-bar {
+  background-color: blue;
+  width: 100%;
+}
