@@ -1,4 +1,4 @@
-// Variables
+// HTML elements
 const headAttack = document.getElementById('head-attack');
 const torsoAttack = document.getElementById('torso-attack');
 const legAttack = document.getElementById('leg-attack');
@@ -11,6 +11,13 @@ const declareWinnerMessage = document.getElementById('declare-winner');
 const battleOverScreen = document.getElementById('battle-over');
 const heroBox = document.querySelector('.hero');
 const enemyBox = document.querySelector('.enemy');
+const nameUI = document.getElementById('name');
+const lvlUI = document.getElementById('lvl');
+const inventory = document.getElementById('inventory');
+const xpUI = document.getElementById('xp');
+const goldUI = document.getElementById('gold');
+const hpUI = document.getElementById('hp');
+const mpUI = document.getElementById('mp');
 
 const everyBattleOption = [
   headAttack,
@@ -26,7 +33,7 @@ let fightInProgress = false;
 // Classes
 
 class FightingUnit {
-  constructor(lvl, name) {
+  constructor(lvl, name, url) {
     this.name = name;
     this.lvl = lvl;
     this.wp = {};
@@ -39,6 +46,8 @@ class FightingUnit {
     this.hp = this.str * 20;
     this.mp = this.int * 10;
     this.maxHp = this.hp;
+    this.url = url;
+    this.xpBounty = this.lvl * 50;
   }
   attackCPU(target) {
     let hitStrength = 0;
@@ -164,7 +173,7 @@ class Hero extends FightingUnit {
     this.traits = [];
     this.abilities = [];
     this.inventory = [];
-    this.coins = [];
+    this.coins = 100;
     this.ap = 150 + this.lvl * 10;
   }
   rest() {
@@ -177,8 +186,8 @@ class Hero extends FightingUnit {
 }
 
 class Boss extends FightingUnit {
-  constructor(lvl, name) {
-    super(lvl, name);
+  constructor(lvl, name, url) {
+    super(lvl, name, url);
     this.bossAbilities = [];
 
     this.ap = 190 + this.lvl * 10;
@@ -224,10 +233,10 @@ class Equipment {
   }
 }
 
-const unit1 = new FightingUnit(1, 'Peasant1');
-const unit2 = new FightingUnit(2, 'Peasant2');
+const unit1 = new FightingUnit(1, 'Peasant1', 'images/characters/peasant.png');
+const unit2 = new FightingUnit(2, 'Peasant2', 'images/characters/peasant.png');
 const hero1 = new Hero(9, 'Blademaster');
-const boss1 = new Boss(10, 'Bloodmage');
+const boss1 = new Boss(10, 'Grunt', 'images/characters/orc-warrior.png');
 const sword1 = new Equipment(
   0,
   15,
@@ -247,6 +256,15 @@ const sword1 = new Equipment(
   'images/sword1.png'
 );
 const sandBox = [hero1, unit2, unit1, boss1];
+
+const playerUiUpdate = () => {
+  nameUI.innerText = hero1.name;
+  lvlUI.innerText = `Level: ${hero1.lvl}`;
+  xpUI.innerText = `XP: ${hero1.xp}`;
+  goldUI.innerHTML = `Gold: ${hero1.coins}`;
+};
+
+playerUiUpdate();
 
 hero1.inventory.push(sword1);
 console.log(hero1.inventory[0]);
@@ -277,13 +295,14 @@ const updateHP = (hero, enemy) => {
   enemyBox.children[0].innerText = enemy[1].name;
   heroBox.children[1].innerText = `${hero.hp}/${hero.maxHp}`;
   enemyBox.children[1].innerText = `${enemy[1].hp}/${enemy[1].maxHp}`;
+  document
+    .querySelectorAll('#fighter-box')[1]
+    .children[3].setAttribute('src', enemy[1].url);
 };
 
 const startFight = (hero, enemy) => {
   updateHP(hero1, sandBox);
-  document
-    .querySelectorAll('#fighter-box')[1]
-    .children[3].setAttribute('src', 'images/characters/peasant.png');
+  document.getElementById('player-ui').style.visibility = 'hidden';
   document.querySelector('enemy');
   document.getElementById('fight-ui').style.visibility = 'visible';
   document.body.style.flexDirection = 'column-reverse';
@@ -459,20 +478,27 @@ const startFight = (hero, enemy) => {
   }
 };
 battleOverScreen.addEventListener('click', () => {
+  console.log(hero1.xp);
+  hero1.xp += sandBox[1].xpBounty;
+  console.log(hero1.xp);
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
   document.body.style.flexDirection = 'column';
+
   sandBox.splice(1, 1);
   updateHP(hero1, sandBox);
+  document.getElementById('player-ui').style.visibility = 'visible';
+  playerUiUpdate();
 });
 
 const nextFight = () => {
   document.getElementById('fight-ui').style.visibility = 'visible';
   document.body.style.flexDirection = 'column-reverse';
+  window.scrollTo(0, 0);
 };
 
 unit1.int += 10;
 hero1.str += 200;
 
-startFight(hero1, sandBox);
+// startFight(hero1, sandBox);

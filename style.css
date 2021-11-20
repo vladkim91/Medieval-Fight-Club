@@ -148,3 +148,15 @@ margin: 10px auto;
   height: 350px;
   margin-top: 20px
 }
+
+#nav-bar {
+  display: flex;
+  height: 40px;
+  width: 100%;
+  background-color: goldenrod;
+  border-bottom: black solid 5px;
+  border-top: black solid 5px;
+  justify-content: space-around;
+  align-items: center;
+
+}
