@@ -19,6 +19,8 @@ const goldUI = document.getElementById('gold');
 const hpUI = document.getElementById('hp');
 const mpUI = document.getElementById('mp');
 const sideBar = document.getElementById('side-bar');
+const levelUp = document.getElementById('level-up');
+const levelUps = [200, 600, 1200];
 
 const everyBattleOption = [
   headAttack,
@@ -88,7 +90,6 @@ class FightingUnit {
       document.getElementById('move-log').appendChild(message);
     };
     generateLogMessage();
-    console.log(target.hp, target.name, hitStrength);
   }
 
   attack(enemy, target, type, defense) {
@@ -136,7 +137,6 @@ class FightingUnit {
       this.defense = 'legs';
     }
 
-    console.log(this.offense, hitStrength);
     // Enemy defense
     const enemyDefense = ['head', 'torso', 'legs'];
     enemy.defense = enemyDefense[Math.floor(Math.random() * 3)];
@@ -152,7 +152,6 @@ class FightingUnit {
         enemy.hp -= hitStrength;
         hitMessage = `${this.name} hit ${enemy.name} to deal ${hitStrength} damage in the ${this.offense}`;
       }
-      console.log(enemy.hp, enemy.name, hitStrength);
     }
     const generateLogMessage = () => {
       const time = new Date();
@@ -179,7 +178,9 @@ class Hero extends FightingUnit {
     this.ap = 150 + this.lvl * 10;
   }
   rest() {
-    this.hp = this.str * 20;
+    this.hp = this.maxHp;
+    this.mp = this.maxMP;
+    playerUiUpdate();
   }
   collectLoot() {}
   equip(item) {
@@ -191,8 +192,7 @@ class Boss extends FightingUnit {
   constructor(lvl, name, url) {
     super(lvl, name, url);
     this.bossAbilities = [];
-
-    this.ap = 190 + this.lvl * 10;
+    this.bossBounty = this.xpBounty + 100;
   }
   dropLoot() {}
 }
@@ -237,7 +237,7 @@ class Equipment {
 
 const unit1 = new FightingUnit(1, 'Peasant1', 'images/characters/peasant.png');
 const unit2 = new FightingUnit(2, 'Peasant2', 'images/characters/peasant.png');
-const hero1 = new Hero(9, 'Blademaster');
+const hero1 = new Hero(1, 'Blademaster');
 const boss1 = new Boss(10, 'Grunt', 'images/characters/orc-warrior.png');
 const sword1 = new Equipment(
   0,
@@ -260,6 +260,7 @@ const sword1 = new Equipment(
 const sandBox = [hero1, unit2, unit1, boss1];
 
 const playerUiUpdate = () => {
+  levelUp.innerText = `${levelUps[hero1.lvl - 1] - hero1.xp} XP for Level Up`;
   nameUI.innerText = hero1.name;
   lvlUI.innerText = `Level: ${hero1.lvl}`;
   xpUI.innerText = `XP: ${hero1.xp}`;
@@ -268,7 +269,7 @@ const playerUiUpdate = () => {
   sideBar.children[2].innerText = `Mana Points: ${hero1.mp}/${hero1.maxMP}`;
   const percentageHp = (hero1.hp / hero1.maxHp) * 100;
   const percentageMp = (hero1.mp / hero1.maxMP) * 100;
-  console.log(percentageHp, percentageMp);
+
   sideBar.children[1].style.width = `${percentageHp.toFixed(0)}%`;
   sideBar.children[3].style.width = `${percentageMp.toFixed(0)}%`;
 };
@@ -280,7 +281,7 @@ console.log(hero1.inventory[0]);
 // Winning conditions
 const check4Winner = (hero, enemy) => {
   let winner;
-  console.log(hero);
+
   if (enemy.hp <= 0) {
     battleOverScreen.style.visibility = 'visible';
     fightInProgress = false;
@@ -310,6 +311,7 @@ const updateHP = (hero, enemy) => {
 };
 
 const startFight = (hero, enemy) => {
+  window.scrollTo(0, 0);
   updateHP(hero1, sandBox);
   document.getElementById('player-ui').style.visibility = 'hidden';
   document.querySelector('enemy');
@@ -336,8 +338,10 @@ const startFight = (hero, enemy) => {
       apUsedMessage.innerText = `Action points used: ${totalApCost}/${hero.ap}`;
       if (totalApCost > hero.ap) {
         apUsedMessage.style.color = 'red';
+        makeMove.value = 'Not enought AP';
       } else {
         apUsedMessage.style.color = 'black';
+        makeMove.value = 'Make your move!';
       }
 
       return totalApCost;
@@ -351,13 +355,10 @@ const startFight = (hero, enemy) => {
             if (e.value == 'normal-attack') {
               e[1].classList.remove('passive');
               e[2].classList.add('passive');
-              // console.log(e.value, 'normal+');
             } else if (e.value == 'heavy-attack') {
               e[2].classList.remove('passive');
               e[1].classList.add('passive');
-              // console.log(e.value, 'heavy+');
             } else if (e.value == 'off') {
-              // console.log(e.value, 'empty+');
               e[1].classList.add('passive');
               e[2].classList.add('passive');
             } else if (e.value == 'defend') {
@@ -413,6 +414,8 @@ const startFight = (hero, enemy) => {
             currentDefense.push(everyBattleOption[i].getAttribute('id'));
           }
         }
+      } else {
+        return null;
       }
       // Target and deal damage to enemy
       if (currentTarget.includes('head-attack')) {
@@ -486,9 +489,16 @@ const startFight = (hero, enemy) => {
   } else {
   }
 };
+
+xpUI.addEventListener('mouseover', () => {
+  levelUp.style.visibility = 'visible';
+});
+xpUI.addEventListener('mouseout', () => {
+  levelUp.style.visibility = 'hidden';
+});
+
 battleOverScreen.addEventListener('click', () => {
   hero1.xp += sandBox[1].xpBounty;
-
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
@@ -501,6 +511,7 @@ battleOverScreen.addEventListener('click', () => {
 });
 
 const nextFight = () => {
+  updateHP(hero1, sandBox);
   document.getElementById('fight-ui').style.visibility = 'visible';
   document.body.style.flexDirection = 'column-reverse';
   window.scrollTo(0, 0);
