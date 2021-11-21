@@ -68,21 +68,37 @@ class FightingUnit {
       hitStrength = hitStrength * 1.4;
     }
 
-    let enemyAttack = ['head', 'torso', 'legs'];
-    this.offense = enemyAttack[Math.floor(Math.random() * 3)];
-    if (this.offense == target.defense) {
-      const reducredHit = (hitStrength /= 3);
-      hitMessage = `${target.name} blocked ${this.name}'s strike to the ${
-        target.defense
-      } and reduced its impact to ${reducredHit.toFixed(0)}`;
-
-      target.hp -= hitStrength.toFixed(0);
+    const dodgeChance = target.agl;
+    const accuracy = this.agl + 100;
+    const hitChance = accuracy - dodgeChance;
+    const independentVariable = Math.floor(Math.random() * 101);
+    let hitOrMiss;
+    if (independentVariable < hitChance.toFixed(0)) {
+      hitOrMiss = 1;
     } else {
-      target.hp -= hitStrength;
-      hitMessage = `${this.name} hit ${
-        target.name
-      } to deal ${hitStrength.toFixed(0)} damage in the ${this.offense}`;
+      hitOrMiss = 0;
     }
+
+    if (hitOrMiss == 0) {
+      hitMessage = `${target.name} dodged ${this.name}'s attack. ${this.name} is too slow`;
+    } else {
+      let enemyAttack = ['head', 'torso', 'legs'];
+      this.offense = enemyAttack[Math.floor(Math.random() * 3)];
+      if (this.offense == target.defense) {
+        const reducredHit = (hitStrength /= 3);
+        hitMessage = `${target.name} blocked ${this.name}'s strike to the ${
+          target.defense
+        } and reduced its impact to ${reducredHit.toFixed(0)}`;
+
+        target.hp -= hitStrength.toFixed(0);
+      } else {
+        target.hp -= hitStrength;
+        hitMessage = `${this.name} hit ${
+          target.name
+        } to deal ${hitStrength.toFixed(0)} damage in the ${this.offense}`;
+      }
+    }
+
     const generateLogMessage = () => {
       const time = new Date();
       const currentTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
@@ -138,23 +154,39 @@ class FightingUnit {
     } else if (defense[0] == 'leg-defend') {
       this.defense = 'legs';
     }
+    // Dodge defense
+    const dodgeChance = enemy.agl;
+    const accuracy = this.agl + 100;
+    const hitChance = accuracy - dodgeChance;
 
-    // Enemy defense
-    const enemyDefense = ['head', 'torso', 'legs'];
-    enemy.defense = enemyDefense[Math.floor(Math.random() * 3)];
-    if (this.offense !== '') {
-      if (this.offense == enemy.defense) {
-        const reducredHit = (hitStrength /= 3);
-        hitMessage = `${enemy.name} blocked ${this.name}'s strike to the ${
-          enemy.defense
-        } and reduced its impact to ${reducredHit.toFixed(0)}`;
+    const independentVariable = Math.floor(Math.random() * 101);
 
-        enemy.hp -= hitStrength.toFixed(0);
-      } else {
-        enemy.hp -= hitStrength;
-        hitMessage = `${this.name} hit ${enemy.name} to deal ${hitStrength} damage in the ${this.offense}`;
+    let hitOrMiss;
+    if (independentVariable < hitChance.toFixed(0)) {
+      hitOrMiss = 1;
+    } else {
+      hitOrMiss = 0;
+    }
+    if (hitOrMiss == 0) {
+      hitMessage = `${enemy.name} is too quick or ${this.name} is too slow. He dodged your attack`;
+    } else {
+      const enemyDefense = ['head', 'torso', 'legs'];
+      enemy.defense = enemyDefense[Math.floor(Math.random() * 3)];
+      if (this.offense !== '') {
+        if (this.offense == enemy.defense) {
+          const reducredHit = (hitStrength /= 3);
+          hitMessage = `${enemy.name} blocked ${this.name}'s strike to the ${
+            enemy.defense
+          } and reduced its impact to ${reducredHit.toFixed(0)}`;
+
+          enemy.hp -= hitStrength.toFixed(0);
+        } else {
+          enemy.hp -= hitStrength;
+          hitMessage = `${this.name} hit ${enemy.name} to deal ${hitStrength} damage in the ${this.offense}`;
+        }
       }
     }
+    // Enemy defense
     const generateLogMessage = () => {
       const time = new Date();
       const currentTime = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
@@ -287,12 +319,18 @@ const updateObjectives = () => {
 updateObjectives();
 
 const playerUiUpdate = () => {
+  const levelUpBonuses = () => {
+    this.str += 1;
+    this.agl += 1;
+    this.int += 1;
+    this.lck += 1;
+  };
   if (hero1.xp == levelUps[0]) {
-    hero1.lvl++;
+    hero1.lvl = 2;
   } else if (hero1.xp == levelUps[1]) {
-    hero1.lvl++;
+    hero1.lvl = 3;
   } else if (hero1.xp == levelUps[2]) {
-    hero1.lvl++;
+    hero1.lvl = 4;
   }
 
   levelUp.innerText = `${levelUps[hero1.lvl - 1] - hero1.xp} XP for Level Up`;
@@ -566,4 +604,6 @@ const nextFight = () => {
 };
 
 hero1.str += 100;
-// startFight(hero1, sandBox);
+hero1.agl += 50;
+// unit1.agl += 50;
+startFight(hero1, sandBox);
