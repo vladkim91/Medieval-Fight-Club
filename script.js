@@ -22,6 +22,7 @@ const sideBar = document.getElementById('side-bar');
 const levelUp = document.getElementById('level-up');
 const levelUps = [100, 500, 1200, 2100];
 const objectivesMenu = document.getElementById('objectives');
+const restButton = document.getElementById('rest');
 
 const everyBattleOption = [
   headAttack,
@@ -302,6 +303,17 @@ const objectivesList = [
   'Time to face the boss! Take out that big green bully'
 ];
 
+const nextFight = () => {
+  if (hero1.hp !== hero1.maxHp) {
+    alert('You need to rest before your next fight!');
+  } else {
+    updateHP(hero1, sandBox);
+    document.getElementById('fight-ui').style.visibility = 'visible';
+    document.body.style.flexDirection = 'column-reverse';
+    window.scrollTo(0, 0);
+  }
+};
+
 const updateObjectives = () => {
   switch (sandBox.length) {
     case 4:
@@ -581,7 +593,7 @@ battleOverScreen.addEventListener('click', () => {
     hero1.coins += sandBox[1].bossGoldBounty;
     hero1.xp += sandBox[1].bossXpBounty;
   }
-
+  window.scrollTo(0, 0);
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
@@ -592,18 +604,18 @@ battleOverScreen.addEventListener('click', () => {
   playerUiUpdate();
 });
 
-const nextFight = () => {
-  if (hero1.hp !== hero1.maxHp) {
-    alert('You need to rest before your next fight!');
-  } else {
-    updateHP(hero1, sandBox);
-    document.getElementById('fight-ui').style.visibility = 'visible';
-    document.body.style.flexDirection = 'column-reverse';
-    window.scrollTo(0, 0);
-  }
-};
-
+restButton.addEventListener('mouseover', () => {
+  restButton.classList.add('glow');
+  document.getElementById('rest-message').style.visibility = 'visible';
+});
+restButton.addEventListener('mouseout', () => {
+  restButton.classList.remove('glow');
+  document.getElementById('rest-message').style.visibility = 'hidden';
+});
+restButton.addEventListener('click', () => {
+  hero1.rest();
+});
 hero1.str += 100;
-hero1.agl += 50;
+
 // unit1.agl += 50;
-startFight(hero1, sandBox);
+// startFight(hero1, sandBox);

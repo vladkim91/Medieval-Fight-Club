@@ -9,6 +9,7 @@ body {
   background-color: rgb(85, 85, 85);
   display:flex;
   flex-direction: column;
+  
 }
 
 #player-ui {
@@ -230,3 +231,26 @@ width: 100%;
   margin-top: 50px;
 }
 
+#rest {
+  width: 130px;
+  height: 300px;
+  position: absolute;
+  margin-top: -80px;
+  margin-left: 720px;
+  
+}
+
+.glow {
+  -webkit-box-shadow: 0 0 10px 5px #fff;
+  box-shadow: 0 0 10px 5px #fff;
+}
+
+#rest-message {
+  visibility: hidden;
+  color: goldenrod;
+  text-align: center;
+  margin: 100px 0;
+  letter-spacing: 2px;
+  font-style: italic;
+  
+}
