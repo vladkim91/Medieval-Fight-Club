@@ -20,7 +20,8 @@ const hpUI = document.getElementById('hp');
 const mpUI = document.getElementById('mp');
 const sideBar = document.getElementById('side-bar');
 const levelUp = document.getElementById('level-up');
-const levelUps = [200, 600, 1200];
+const levelUps = [100, 500, 1200, 2100];
+const objectivesMenu = document.getElementById('objectives');
 
 const everyBattleOption = [
   headAttack,
@@ -52,6 +53,7 @@ class FightingUnit {
     this.maxMP = this.mp;
     this.url = url;
     this.xpBounty = this.lvl * 50;
+    this.goldBounty = Math.floor(Math.random() * (50 - 25) + 25) * this.lvl;
   }
   attackCPU(target) {
     let hitStrength = 0;
@@ -192,7 +194,8 @@ class Boss extends FightingUnit {
   constructor(lvl, name, url) {
     super(lvl, name, url);
     this.bossAbilities = [];
-    this.bossBounty = this.xpBounty + 100;
+    this.bossXpBounty = this.xpBounty + 100;
+    this.bossGoldBounty = this.goldBounty + 100;
   }
   dropLoot() {}
 }
@@ -236,7 +239,7 @@ class Equipment {
 }
 
 const unit1 = new FightingUnit(1, 'Peasant1', 'images/characters/peasant.png');
-const unit2 = new FightingUnit(2, 'Peasant2', 'images/characters/peasant.png');
+const unit2 = new FightingUnit(1, 'Peasant2', 'images/characters/peasant.png');
 const hero1 = new Hero(1, 'Blademaster');
 const boss1 = new Boss(10, 'Grunt', 'images/characters/orc-warrior.png');
 const sword1 = new Equipment(
@@ -257,9 +260,41 @@ const sword1 = new Equipment(
   'sword',
   'images/sword1.png'
 );
-const sandBox = [hero1, unit2, unit1, boss1];
+const sandBox = [hero1, unit1, unit2, boss1];
+const newObjective = document.createElement('div');
+newObjective.setAttribute('id', 'new-objective');
+objectivesMenu.appendChild(newObjective);
+const objectivesList = [
+  'Buy yourself weapon and face your first opponent',
+  'Greate job! You need another tune up fight before your first big test',
+  'Time to face the boss! Take out that big green bully'
+];
+
+const updateObjectives = () => {
+  switch (sandBox.length) {
+    case 4:
+      newObjective.innerText = objectivesList[0];
+
+      break;
+    case 3:
+      newObjective.innerText = objectivesList[1];
+      break;
+    case 2:
+      newObjective.innerText = objectivesList[2];
+      break;
+  }
+};
+updateObjectives();
 
 const playerUiUpdate = () => {
+  if (hero1.xp == levelUps[0]) {
+    hero1.lvl++;
+  } else if (hero1.xp == levelUps[1]) {
+    hero1.lvl++;
+  } else if (hero1.xp == levelUps[2]) {
+    hero1.lvl++;
+  }
+
   levelUp.innerText = `${levelUps[hero1.lvl - 1] - hero1.xp} XP for Level Up`;
   nameUI.innerText = hero1.name;
   lvlUI.innerText = `Level: ${hero1.lvl}`;
@@ -269,7 +304,7 @@ const playerUiUpdate = () => {
   sideBar.children[2].innerText = `Mana Points: ${hero1.mp}/${hero1.maxMP}`;
   const percentageHp = (hero1.hp / hero1.maxHp) * 100;
   const percentageMp = (hero1.mp / hero1.maxMP) * 100;
-
+  updateObjectives();
   sideBar.children[1].style.width = `${percentageHp.toFixed(0)}%`;
   sideBar.children[3].style.width = `${percentageMp.toFixed(0)}%`;
 };
@@ -295,14 +330,16 @@ const check4Winner = (hero, enemy) => {
     haveWinner = true;
     winner = enemy.name;
     declareWinnerMessage.innerText = `${enemy.name} is victorious`;
+    enemy.hp = enemy.maxHp;
+    enemy.mp = enemy.maxMP;
   }
   return winner;
 };
 
 // Event Listners
 const updateHP = (hero, enemy) => {
-  heroBox.children[0].innerText = hero.name;
-  enemyBox.children[0].innerText = enemy[1].name;
+  heroBox.children[0].innerText = `${hero.name}:       Lvl ${hero.lvl}`;
+  enemyBox.children[0].innerText = `${enemy[1].name}: Lvl       ${enemy[1].lvl}`;
   heroBox.children[1].innerText = `${hero.hp}/${hero.maxHp}`;
   enemyBox.children[1].innerText = `${enemy[1].hp}/${enemy[1].maxHp}`;
   document
@@ -498,26 +535,35 @@ xpUI.addEventListener('mouseout', () => {
 });
 
 battleOverScreen.addEventListener('click', () => {
-  hero1.xp += sandBox[1].xpBounty;
+  if (hero1.hp > 0) {
+    hero1.coins += sandBox[1].goldBounty;
+    hero1.xp += sandBox[1].xpBounty;
+    sandBox.splice(1, 1);
+  } else if (hero1.hp > 0 && sandBox[1].constructor.name == 'Boss') {
+    hero1.coins += sandBox[1].bossGoldBounty;
+    hero1.xp += sandBox[1].bossXpBounty;
+  }
+
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
   document.body.style.flexDirection = 'column';
 
-  sandBox.splice(1, 1);
   updateHP(hero1, sandBox);
   document.getElementById('player-ui').style.visibility = 'visible';
   playerUiUpdate();
 });
 
 const nextFight = () => {
-  updateHP(hero1, sandBox);
-  document.getElementById('fight-ui').style.visibility = 'visible';
-  document.body.style.flexDirection = 'column-reverse';
-  window.scrollTo(0, 0);
+  if (hero1.hp !== hero1.maxHp) {
+    alert('You need to rest before your next fight!');
+  } else {
+    updateHP(hero1, sandBox);
+    document.getElementById('fight-ui').style.visibility = 'visible';
+    document.body.style.flexDirection = 'column-reverse';
+    window.scrollTo(0, 0);
+  }
 };
 
-unit1.int += 10;
-hero1.str += 200;
-
+hero1.str += 100;
 // startFight(hero1, sandBox);

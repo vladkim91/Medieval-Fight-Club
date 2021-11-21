@@ -206,4 +206,27 @@ width: 100%;
   
 }
 
+#objectives {
+  width: 200px;
+  height: 200px;
+  background-color: goldenrod;
+  border: black 2px solid;
+  position: relative;
+  margin-top: 120px;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+
+}
+
+#obj {
+  font-size: 35px;
+  margin-left:20px;
+  
+}
+
+#new-objective {
+  text-align: center;
+  margin-top: 50px;
+}
 
