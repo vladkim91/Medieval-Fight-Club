@@ -46,9 +46,7 @@ class FightingUnit {
     this.name = name;
     this.lvl = lvl;
     this.wp = {};
-    this.arHelm = {};
-    this.arBelt = {};
-    this.arBoots = {};
+    this.ar = {};
     this.str = 9 + this.lvl;
     this.agl = 9 + this.lvl;
     this.int = 9 + this.lvl;
@@ -217,6 +215,9 @@ class Hero extends FightingUnit {
     this.inventory = [];
     this.coins = 100;
     this.ap = 150 + this.lvl * 10;
+    this.helmArmor = {};
+    this.torsoArmor = {};
+    this.letArmor = {};
   }
   rest() {
     this.hp = this.maxHp;
@@ -302,24 +303,6 @@ const sword1 = new Equipment(
   'sword',
   'images/equipment/sword1.png'
 );
-const helmet1 = new Equipment(
-  10,
-  0,
-  50,
-  1,
-  100,
-  5,
-  0,
-  0,
-  0,
-  -10,
-  10,
-  0,
-  0,
-  0,
-  'helmet',
-  'images/equipment/helm1.gif'
-);
 const sword2 = new Equipment(
   0,
   15,
@@ -351,7 +334,7 @@ const objectivesList = [
   'Take out this Spartan warrior to solidify your position in the Club'
 ];
 hero1.inventory.push(sword1);
-hero1.inventory.push(helmet1);
+hero1.inventory.push(sword2);
 hero1.wp = hero1.inventory[0];
 
 const updateInventory = () => {
@@ -399,7 +382,7 @@ const updateObjectives = () => {
       newObjective.innerText = objectivesList[5];
       break;
     case 1:
-      newObjective.innerText = objectivesList[7];
+      newObjective.innerText = objectivesList[6];
       break;
   }
 };
@@ -706,4 +689,4 @@ document.getElementById('inventory').addEventListener('click', () => {
 // hero1.str += 100;
 // unit1.agl += 50;
 
-// startFight(hero1, sandBox);
+startFight(hero1, sandBox);
