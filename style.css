@@ -235,7 +235,7 @@ width: 100%;
   width: 130px;
   height: 300px;
   position: absolute;
-  margin-top: -80px;
+  margin-top: -120px;
   margin-left: 720px;
   
 }
@@ -340,3 +340,126 @@ background-color: white;
   background-repeat: no-repeat;  
   background-position: center;
 }
+
+#next-fight, #first-fight{
+  background-color: goldenrod;
+  height: 25px;
+  width: 90px;
+  border-radius: 5px;
+  border: black 3px solid;
+  text-align: center;
+  padding: 5px;
+  font-size: 20px;
+}
+
+#first-fight {
+  margin-top: -31px;
+}
+
+#welcome-screen {
+  background-image: url(images/outside.jpg);
+  height: 800px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.fade-out {
+  animation: fadeOut ease 8s;
+  -webkit-animation: fadeOut ease 8s;
+  -moz-animation: fadeOut ease 8s;
+  -o-animation: fadeOut ease 8s;
+  -ms-animation: fadeOut ease 8s;
+
+}
+
+#logo {
+  margin: 50px 250px;
+  position: absolute;
+}
+
+
+
+@keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-moz-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-o-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+  }
+}
+
+@-ms-keyframes fadeOut {
+  0% {
+    opacity:1;
+  }
+  100% {
+    opacity:0;
+}
+}
+
+#bouncer-container {
+
+position: absolute;
+display: flex;
+margin-left: 450px;
+margin-top: 550px;
+}
+
+#bouncer img {
+  width: 150px;
+}
+
+#conversation-bubble {
+  font-size: 30px;
+  color: white;
+
+}
+
+#conversation-bubble img{
+  width: 400px;
+  margin-top: -250px;
+
+
+}
+
+#bouncer-message {
+  margin-top: -250px;
+  margin-left: 100px;
+  width: 250px;
+}
+
+#door {
+  margin-left:830px;
+  margin-top: 428px;
+  width: 110px;
+}
+

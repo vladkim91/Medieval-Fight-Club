@@ -444,6 +444,7 @@ const playerUiUpdate = () => {
     hero1.agl += 1;
     hero1.int += 1;
     hero1.lck += 1;
+    hero1.ap += 10;
   };
   strength.innerText = `Strength: ${hero1.str}`;
   agility.innerText = `Agility: ${hero1.agl}`;
@@ -736,7 +737,14 @@ document.getElementById('inventory').addEventListener('click', () => {
   document.getElementById('inventory-wrapper').classList.toggle('hidden');
 });
 
+document.getElementById('first-fight').addEventListener('click', () => {
+  startFight(hero1, sandBox);
+  document.getElementById('next-fight').classList.remove('hidden');
+  document.getElementById('first-fight').classList.add('hidden');
+});
+document.getElementById('next-fight').addEventListener('click', nextFight);
+
 // hero1.str += 100;
 // unit1.agl += 50;
 
-startFight(hero1, sandBox);
+// startFight(hero1, sandBox);

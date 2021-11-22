@@ -11,117 +11,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
   <title>Medieval Fight Club</title>
+
 </head>
 <body>
-  <div id="player-ui">
-    <div id="nav-bar">
-      <div id="name"></div>
-      <div id="lvl"></div>
-      <div id="inventory">Inventory</div>
-      <div id="xp"></div>
-      
-      <div id="level-up"></div>
-      
-      <div id="gold"></div>
-    </div>
-    <div id="side-bar">
-      <div id="hp" class="side-bar-indicators">Hit Points: </div>
-      <div id="hp-bar" class='bar'></div>
-      <div id="mp"class="side-bar-indicators">Mana Points: </div>
-      <div id="mp-bar" class='bar'></div>
-    </div>
-    <div id="objectives">
-      <h3 id="obj">Objective</h3>
-      
-    </div>
-    <div id="rest">
-      <h3 id="rest-message">Go upstair to recover HitPoints and Mana before the next fight</h3>
-    </div>
-    <div id="inventory-wrapper" class="hidden">
-      <div id="player-view">
-        <img src="images/hero.png" alt="" id="hero-avatar">
-      </div>
-      <div id="stat-box">
-        <div id="strength" class="stat"></div>
-        <div id="agility" class="stat"></div>
-        <div id="intelligence" class="stat"></div>
-      </div>
-      <div id="spells"></div>
-      <div id="inventory-container">
-       
-      </div>
-    </div>
-    <div id="bottom-bar">
-      <div id="store"></div>
-      <div id="repair"></div>
-    </div>
-  </div>
-  <div id="fight-ui">
-    <div id="avatar-hp-mp">
-        <div id="fighter-box" class="hero">
-        <h3 id="fighter-name"></h3>
-        <div id="hp-bar-infight"></div>
-        <div id="mp-bar-infight"></div>
-        <img src="images/hero.png" alt="" class="avatar">
-
-      </div>
-      <div id="fighter-box" class="enemy">
-        <h3 id="fighter-name"></h3>
-        <div id="hp-bar-infight"></div>
-        <div id="mp-bar-infight"></div>
-        <img src="" alt="" class="avatar">
-      </div>
-    </div>
-    
-    <form id="pick-bodyparts">
-      <div id="attack-bodyparts">
-        <p class="label attack">Attack</p>
-        <select id="head-attack">
-          <option value="off"data-apcost="0" class="passive">select one</option>
-          <option value="normal-attack" data-apcost="60" class="passive" >Regular attack (60)</option>
-          <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
-        </select>
-        <select id="torso-attack">
-          <option value="off"data-apcost="0" class="passive">select one</option>
-          <option value="normal-attack" data-apcost="60" class="passive">Regular attack (60)</option>
-          <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
-        </select>
-        <select id="leg-attack">
-          <option value="off"data-apcost="0" class="passive">select one</option>
-          <option value="normal-attack" data-apcost="60" class="passive">Regular attack (60)</option>
-          <option value="heavy-attack" data-apcost="85" class="passive">Heavy attack (85)</option>
-        </select>
-      </div>
-      <div id="defend-bodyparts">
-        <p class="label defend">Defend</p>
-        <select id="head-defend">
-          <option value="def" data-apcost="0" class="passive">select one</option>
-          <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
-        </select>
-        <select id="torso-defend">
-          <option value="def"data-apcost="0" class="passive">select one</option>
-          <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
-        </select>
-        <select id="leg-defend">
-          <option value="def"data-apcost="0" class="passive">select one</option>
-          <option value="defend" data-apcost="90" class="passive">Defend (90)</option>
-        </select>
-      </div>
-      
-      
-    </form>
-    <p id="ap-used">Action points used: 0</p>
-    <input type="button" id="submit-choice" value="Make your move!">
-    <div id="battle-over">
-      <h3 id="over">Battle is over</h3>
-      <div id="declare-winner"></div>
-    </div>
-    <div id="fight-log">
-      <h3 id="log">Battle Log</h3>
-      <div id="move-log"></div>
-    </div>
-  </div>
-  
-  <script src="script.js"></script>
+<div id="welcome-screen">
+<img id="logo"src="images/Logo.jpg" alt="" >
+<div id="bouncer-container" class="hidden">
+  <div id="bouncer"><img src="images/characters/bouncer.png" alt=""></div>
+  <div id="conversation-bubble" ><img src="images/637px-Speech_bubble.svg.png" alt=""class="hidden">
+  <p id='bouncer-message'></p></div>
+</div>
+<img src="images/door.png" alt="" id="door">
+</div>
+<script src="intro-script.js"></script>
 </body>
 </html>
