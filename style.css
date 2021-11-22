@@ -254,3 +254,89 @@ width: 100%;
   font-style: italic;
   
 }
+
+#inventory-wrapper {
+  height: 800px;
+  width: 980px;
+  background-color: goldenrod;
+  position: fixed;
+  top: 130px;
+  left: 330px;
+  border: black solid 4px;
+  border-radius: 10px;
+}
+
+#player-view {
+border: solid black 4px;
+border-radius: 10px;
+width: 200px;
+height: 400px;
+margin: 10px;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: white;
+}
+
+#hero-avatar { 
+  height: 380px;
+  
+}
+
+#stat-box {
+  background-color: goldenrod;
+  height: 200px;
+  width: 200px;
+  margin: 10px;
+  border: solid black 4px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat {
+  color: black;
+  text-align: center;
+  font-size: 25px;
+  margin-top: 10px;
+}
+
+#spells {
+  background-color: black;
+  height: 100px;
+  width: 98%;
+  margin: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+#inventory-container {
+  position: fixed;
+  background-color: goldenrod;
+  width: 745px;
+  height: 625px;
+  top: 145px;
+  left: 560px;
+  border-radius: 10px;
+  border: black solid 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  
+
+
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#inventory-slot {
+  background-color: white;
+  margin: 5px;
+  border-radius: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;  
+  background-position: center;
+}

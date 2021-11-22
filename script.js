@@ -23,6 +23,10 @@ const levelUp = document.getElementById('level-up');
 const levelUps = [100, 500, 1200, 2100];
 const objectivesMenu = document.getElementById('objectives');
 const restButton = document.getElementById('rest');
+const strength = document.getElementById('strength');
+const agility = document.getElementById('agility');
+const intelligence = document.getElementById('intelligence');
+const inventoryContainer = document.getElementById('inventory-container');
 
 const everyBattleOption = [
   headAttack,
@@ -42,7 +46,9 @@ class FightingUnit {
     this.name = name;
     this.lvl = lvl;
     this.wp = {};
-    this.ar = {};
+    this.arHelm = {};
+    this.arBelt = {};
+    this.arBoots = {};
     this.str = 9 + this.lvl;
     this.agl = 9 + this.lvl;
     this.int = 9 + this.lvl;
@@ -115,7 +121,7 @@ class FightingUnit {
     let hitMessage = '';
     let hitStrength = 0;
     if (enemy.hp <= 0) return;
-    if (this.wp !== {}) {
+    if (this.wp == {}) {
       hitStrength += this.str;
     } else {
       hitStrength += this.str + this.wp.damage;
@@ -271,10 +277,13 @@ class Equipment {
   }
 }
 
-const unit1 = new FightingUnit(1, 'Peasant1', 'images/characters/peasant.png');
-const unit2 = new FightingUnit(1, 'Peasant2', 'images/characters/peasant.png');
+const unit1 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
+const unit2 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
+const unit3 = new FightingUnit(2, 'Peasant', 'images/characters/peasant.png');
+const unit4 = new FightingUnit(2, 'Peasant', 'images/characters/peasant.png');
 const hero1 = new Hero(1, 'Blademaster');
-const boss1 = new Boss(10, 'Grunt', 'images/characters/orc-warrior.png');
+const boss1 = new Boss(2, 'Orgrim', 'images/characters/orc-warrior.png');
+const boss2 = new Boss(3, 'Leonidas', 'images/characters/spartan.png');
 const sword1 = new Equipment(
   0,
   15,
@@ -291,17 +300,71 @@ const sword1 = new Equipment(
   10,
   0,
   'sword',
-  'images/sword1.png'
+  'images/equipment/sword1.png'
 );
-const sandBox = [hero1, unit1, unit2, boss1];
+const helmet1 = new Equipment(
+  10,
+  0,
+  50,
+  1,
+  100,
+  5,
+  0,
+  0,
+  0,
+  -10,
+  10,
+  0,
+  0,
+  0,
+  'helmet',
+  'images/equipment/helm1.gif'
+);
+const sword2 = new Equipment(
+  0,
+  15,
+  100,
+  1,
+  100,
+  3,
+  1,
+  0,
+  1,
+  10,
+  10,
+  0,
+  10,
+  0,
+  'sword',
+  'images/equipment/sword2.png'
+);
+const sandBox = [hero1, unit1, unit2, boss1, unit3, unit4, boss2];
 const newObjective = document.createElement('div');
 newObjective.setAttribute('id', 'new-objective');
 objectivesMenu.appendChild(newObjective);
 const objectivesList = [
   'Buy yourself weapon and face your first opponent',
   'Greate job! You need another tune up fight before your first big test',
-  'Time to face the boss! Take out that big green bully'
+  'Time to face the boss! Take out that big green bully',
+  'You did well. Rest up, you have more tune up fights coming up',
+  'This one was easy. Get another W before the boss fight',
+  'Take out this Spartan warrior to solidify your position in the Club'
 ];
+hero1.inventory.push(sword1);
+hero1.inventory.push(helmet1);
+hero1.wp = hero1.inventory[0];
+
+const updateInventory = () => {
+  document.getElementById('inventory-container').innerHTML = '';
+
+  for (let i = 0; i < hero1.inventory.length; i++) {
+    const item = document.createElement('div');
+    item.setAttribute('id', 'inventory-slot');
+    item.style.backgroundImage = `url(${hero1.inventory[i].url})`;
+    document.getElementById('inventory-container').appendChild(item);
+  }
+};
+updateInventory();
 
 const nextFight = () => {
   if (hero1.hp !== hero1.maxHp) {
@@ -316,15 +379,27 @@ const nextFight = () => {
 
 const updateObjectives = () => {
   switch (sandBox.length) {
-    case 4:
+    case 7:
       newObjective.innerText = objectivesList[0];
 
       break;
-    case 3:
+    case 6:
       newObjective.innerText = objectivesList[1];
       break;
-    case 2:
+    case 5:
       newObjective.innerText = objectivesList[2];
+      break;
+    case 4:
+      newObjective.innerText = objectivesList[3];
+      break;
+    case 3:
+      newObjective.innerText = objectivesList[4];
+      break;
+    case 2:
+      newObjective.innerText = objectivesList[5];
+      break;
+    case 1:
+      newObjective.innerText = objectivesList[7];
       break;
   }
 };
@@ -332,17 +407,26 @@ updateObjectives();
 
 const playerUiUpdate = () => {
   const levelUpBonuses = () => {
-    this.str += 1;
-    this.agl += 1;
-    this.int += 1;
-    this.lck += 1;
+    hero1.str += 1;
+    hero1.agl += 1;
+    hero1.int += 1;
+    hero1.lck += 1;
   };
+  strength.innerText = `Strength: ${hero1.str}`;
+  agility.innerText = `Agility: ${hero1.agl}`;
+  intelligence.innerText = `Intelligence: ${hero1.int}`;
   if (hero1.xp == levelUps[0]) {
     hero1.lvl = 2;
+    levelUpBonuses();
   } else if (hero1.xp == levelUps[1]) {
     hero1.lvl = 3;
+    levelUpBonuses();
   } else if (hero1.xp == levelUps[2]) {
     hero1.lvl = 4;
+    levelUpBonuses();
+  } else if (hero1.xp == levelUps[3]) {
+    hero1.lvl = 5;
+    levelUpBonuses();
   }
 
   levelUp.innerText = `${levelUps[hero1.lvl - 1] - hero1.xp} XP for Level Up`;
@@ -361,8 +445,6 @@ const playerUiUpdate = () => {
 
 playerUiUpdate();
 
-hero1.inventory.push(sword1);
-console.log(hero1.inventory[0]);
 // Winning conditions
 const check4Winner = (hero, enemy) => {
   let winner;
@@ -585,13 +667,14 @@ xpUI.addEventListener('mouseout', () => {
 });
 
 battleOverScreen.addEventListener('click', () => {
-  if (hero1.hp > 0) {
+  if (hero1.hp > 0 && sandBox[1].constructor.name == 'Boss') {
+    hero1.coins += sandBox[1].bossGoldBounty;
+    hero1.xp += sandBox[1].bossXpBounty;
+    sandBox.splice(1, 1);
+  } else if (hero1.hp > 0) {
     hero1.coins += sandBox[1].goldBounty;
     hero1.xp += sandBox[1].xpBounty;
     sandBox.splice(1, 1);
-  } else if (hero1.hp > 0 && sandBox[1].constructor.name == 'Boss') {
-    hero1.coins += sandBox[1].bossGoldBounty;
-    hero1.xp += sandBox[1].bossXpBounty;
   }
   window.scrollTo(0, 0);
   battleOverScreen.style.visibility = 'hidden';
@@ -615,7 +698,12 @@ restButton.addEventListener('mouseout', () => {
 restButton.addEventListener('click', () => {
   hero1.rest();
 });
-hero1.str += 100;
 
+document.getElementById('inventory').addEventListener('click', () => {
+  document.getElementById('inventory-wrapper').classList.toggle('hidden');
+});
+
+// hero1.str += 100;
 // unit1.agl += 50;
+
 // startFight(hero1, sandBox);
