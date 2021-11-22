@@ -64,6 +64,47 @@ class FightingUnit {
     let hitStrength = 0;
     let hitMessage = '';
 
+    let totalArmor;
+    // target.torsoArmor.defense +
+    // target.helmArmor.defense +
+    // target.legArmor.defense;
+    // if (helmArmor.defense isNaN)
+
+    if (
+      !isNaN(target.helmArmor.defense) &&
+      !isNaN(target.torsoArmor.defense) &&
+      !isNaN(target.legArmor.defense)
+    ) {
+      totalArmor =
+        target.torsoArmor.defense +
+        target.helmArmor.defense +
+        target.legArmor.defense;
+    } else if (
+      !isNaN(target.helmArmor.defense) &&
+      !isNaN(target.torsoArmor.defense) &&
+      isNaN(target.legArmor.defense)
+    ) {
+      totalArmor = target.helmArmor.defense + target.torsoArmor.defense;
+    } else if (
+      !isNaN(target.helmArmor.defense) &&
+      isNaN(target.torsoArmor.defense) &&
+      !isNaN(target.legArmor.defense)
+    ) {
+      totalArmor = target.helmArmor.defense + target.legArmor.defense;
+    } else if (
+      isNaN(target.helmArmor.defense) &&
+      !isNaN(target.torsoArmor.defense) &&
+      !isNaN(target.legArmor.defense)
+    ) {
+      totalArmor = target.torsoArmor.defense + target.legArmor.defense;
+    } else if (!isNaN(target.helmArmor.defense)) {
+      totalArmor = target.helmArmor.defense;
+    } else if (!isNaN(target.torsoArmor.defense)) {
+      totalArmor = target.torsoArmor.defense;
+    } else if (!isNaN(target.legArmor.defense)) {
+      totalArmor = target.legArmor.defense;
+    }
+
     if (this.wp !== {}) {
       hitStrength += this.str;
     } else {
@@ -91,16 +132,24 @@ class FightingUnit {
       this.offense = enemyAttack[Math.floor(Math.random() * 3)];
       if (this.offense == target.defense) {
         const reducredHit = (hitStrength /= 3);
-        hitMessage = `${target.name} blocked ${this.name}'s strike to the ${
-          target.defense
-        } and reduced its impact to ${reducredHit.toFixed(0)}`;
+        if (totalArmor > reducredHit) {
+          hitMessage = `${target.name}'s armor deflected all damage by ${this.name}`;
+        } else {
+          hitMessage = `${target.name} blocked ${this.name}'s strike to the ${
+            target.defense
+          } and reduced its impact to ${reducredHit.toFixed(0) - totalArmor}`;
 
-        target.hp -= hitStrength.toFixed(0);
+          target.hp -= hitStrength.toFixed(0);
+        }
       } else {
-        target.hp -= hitStrength;
-        hitMessage = `${this.name} hit ${
-          target.name
-        } to deal ${hitStrength.toFixed(0)} damage in the ${this.offense}`;
+        if (totalArmor > hitStrength) {
+          hitMessage = `${target.name}'s armor deflected all damage by ${this.name}`;
+        } else {
+          target.hp -= hitStrength - totalArmor;
+          hitMessage = `${this.name} hit ${target.name} to deal ${
+            hitStrength.toFixed(0) - totalArmor
+          } damage in the ${this.offense}`;
+        }
       }
     }
 
@@ -217,7 +266,7 @@ class Hero extends FightingUnit {
     this.ap = 150 + this.lvl * 10;
     this.helmArmor = {};
     this.torsoArmor = {};
-    this.letArmor = {};
+    this.legArmor = {};
   }
   rest() {
     this.hp = this.maxHp;
@@ -303,9 +352,9 @@ const sword1 = new Equipment(
   'sword',
   'images/equipment/sword1.png'
 );
-const sword2 = new Equipment(
+const helm1 = new Equipment(
+  5,
   0,
-  15,
   100,
   1,
   100,
@@ -313,13 +362,13 @@ const sword2 = new Equipment(
   1,
   0,
   1,
-  10,
-  10,
-  0,
+  -10,
   10,
   0,
-  'sword',
-  'images/equipment/sword2.png'
+  10,
+  0,
+  'helmet',
+  'images/equipment/helm1.gif'
 );
 const sandBox = [hero1, unit1, unit2, boss1, unit3, unit4, boss2];
 const newObjective = document.createElement('div');
@@ -334,8 +383,9 @@ const objectivesList = [
   'Take out this Spartan warrior to solidify your position in the Club'
 ];
 hero1.inventory.push(sword1);
-hero1.inventory.push(sword2);
+hero1.inventory.push(helm1);
 hero1.wp = hero1.inventory[0];
+hero1.helmArmor = hero1.inventory[1];
 
 const updateInventory = () => {
   document.getElementById('inventory-container').innerHTML = '';
