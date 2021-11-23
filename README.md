@@ -39,3 +39,33 @@ Do it!
 
 # If you're in, you only need to know 8 rules
 
+## Credits 
+### Artwork
+Outside Tavern image
+https://www.instagram.com/oixxoart/
+Inside Tavern image
+https://www.pinterest.com/ArtStation_HQ/_created/
+Wizards 
+https://www.shutterstock.com/image-vector/old-wise-magician-fantasy-wizard-collection-1628087842
+Bouncer
+https://www.shutterstock.com/image-vector/viking-animated-character-front-side-back-1604312365
+Warriors
+https://www.shutterstock.com/image-vector/fighters-knight-warriors-wizards-samurai-martial-669940837
+Orcs
+https://www.shutterstock.com/image-vector/warrior-orcs-collection-1034894929
+Roman soldier
+https://www.shutterstock.com/image-vector/roman-officer-character-creation-animation-ancient-1616104702
+Potions
+https://opengameart.org/content/potions-set-01
+Staff
+https://opengameart.org/content/magic-staffs-set-1
+Swords
+https://opengameart.org/content/3d-swords-pack
+Misc artwork
+https://opengameart.org/
+Armor images
+https://neverlands.ru
+Avatar
+https://www.cleanpng.com/free/knight.html
+
+

@@ -34,7 +34,7 @@ const fightUiArmor = document.getElementById('armor');
 const fightUiSword = document.getElementById('sword');
 const fightUiBoots = document.getElementById('boots');
 const stats = document.getElementById('stats');
-
+const spells = document.getElementById('spells');
 const everyBattleOption = [
   headAttack,
   torsoAttack,
@@ -898,6 +898,36 @@ restButton.addEventListener('click', () => {
 
 document.getElementById('inventory').addEventListener('click', () => {
   document.getElementById('inventory-wrapper').classList.toggle('hidden');
+  const itemDesc = document.createElement('div');
+  itemDesc.setAttribute('id', 'item-desc');
+
+  inventoryContainer.children[0].addEventListener('mouseover', () => {
+    itemDesc.innerText = `Bouncer sword: Damage ${hero1.inventory[0].damage}`;
+    spells.appendChild(itemDesc);
+  });
+  if (inventoryContainer.children.length == 2) {
+    inventoryContainer.children[1].addEventListener('mouseover', () => {
+      itemDesc.innerText = `Helmet of doom: Armor ${hero1.inventory[1].defense}`;
+      spells.appendChild(itemDesc);
+    });
+  } else if (inventoryContainer.children.length == 3) {
+    inventoryContainer.children[2].addEventListener('mouseover', () => {
+      itemDesc.innerText = `Bronze armor: Armor ${hero1.inventory[2].defense}`;
+      spells.appendChild(itemDesc);
+    });
+  } else if (inventoryContainer.children.length == 4) {
+    inventoryContainer.children[3].addEventListener('mouseover', () => {
+      itemDesc.innerText = `Bronze armor: Armor ${hero1.inventory[3].defense}`;
+      spells.appendChild(itemDesc);
+    });
+  }
+
+  for (let i = 0; i < inventoryContainer.children.length; i++) {
+    inventoryContainer.children[i].addEventListener('mouseout', () => {
+      spells.innerHTML = '';
+    });
+  }
+
   playerUiUpdate();
 });
 

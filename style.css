@@ -304,18 +304,20 @@ background-color: white;
 #spells {
   background-color: black;
   height: 100px;
-  width: 98%;
-  margin: 10px;
+  width: 76%;
+margin-top: -120px;
+  margin-left: 230px;
   border-radius: 5px;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 #inventory-container {
   position: fixed;
   background-color: goldenrod;
   width: 745px;
-  height: 625px;
+  height: 500px;
   top: 145px;
   left: 560px;
   border-radius: 10px;
@@ -505,3 +507,9 @@ align-items: center;
   text-align: center;
   font-size: 400px;
 }
+
+#item-desc {
+  color: white;
+  
+}
+
