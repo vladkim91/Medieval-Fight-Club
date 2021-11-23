@@ -31,6 +31,7 @@ const fightUiHelm = document.getElementById('helm');
 const fightUiArmor = document.getElementById('armor');
 const fightUiSword = document.getElementById('sword');
 const fightUiBoots = document.getElementById('boots');
+const stats = document.getElementById('stats');
 
 const everyBattleOption = [
   headAttack,
@@ -67,7 +68,6 @@ class FightingUnit {
   attackCPU(target) {
     let hitStrength = 0;
     let hitMessage = '';
-
     let totalArmor;
 
     if (
@@ -269,7 +269,7 @@ class Hero extends FightingUnit {
     this.abilities = [];
     this.inventory = [];
     this.coins = 100;
-    this.ap = 150 + this.lvl * 10;
+    this.ap = 160 + this.lvl * 10;
     this.helmArmor = {};
     this.torsoArmor = {};
     this.legArmor = {};
@@ -335,28 +335,49 @@ class Equipment {
 const hero1 = new Hero(1, 'Blademaster');
 
 const unit1 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
+unit1.agl += 2;
 const unit2 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
+unit1.str += 3;
 const unit3 = new FightingUnit(2, 'Peasant', 'images/characters/peasant.png');
+unit3.str += 2;
+unit3.agl += 2;
 const unit4 = new FightingUnit(2, 'Peasant', 'images/characters/peasant.png');
+unit4.str += 3;
+unit4.agl += 3;
 const unit5 = new FightingUnit(
   3,
   'Troll Warrior',
   'images/characters/troll.png'
 );
+unit5.agl += 8;
 const unit6 = new FightingUnit(
   3,
   'Troll Warrior',
   'images/characters/troll.png'
 );
+unit6.agl += 8;
+unit6.str += 6;
 const unit7 = new FightingUnit(
   3,
   'Troll Warrior',
   'images/characters/troll.png'
 );
+unit7.agl += 7;
+unit7.str += 7;
 const boss1 = new Boss(2, 'Orgrim', 'images/characters/orc-warrior.png');
+boss1.str += 10;
+
 const boss2 = new Boss(3, 'Leonidas', 'images/characters/spartan.png');
+boss2.str += 5;
+boss2.agl += 10;
+
 const boss3 = new Boss(5, 'Centurion', 'images/characters/roman.png');
+boss3.str += 5;
+boss3.agl += 10;
+
 const boss4 = new Boss(8, 'Grand mage', 'images/characters/wizard1.png');
+
+boss4.str += 20;
 
 const sword1 = new Equipment(
   0,
@@ -460,7 +481,8 @@ const objectivesList = [
   'One down. Two to go',
   "These trolls don't stand a chance",
   'Time to face the Roman Centurion! Good luck',
-  'This is your final test. Defeat grand wizard for the title of the champion'
+  'This is your final test. Defeat grand wizard for the title of the champion',
+  'You are the champion!'
 ];
 hero1.inventory.push(sword1);
 
@@ -551,22 +573,14 @@ const playerUiUpdate = () => {
     fightUiBoots.style.backgroundImage = `url(${hero1.inventory[3].url})`;
   }
 
+  stats.children[0].innerText = `Strength: ${hero1.str}`;
+  stats.children[1].innerText = `Agility: ${hero1.agl}`;
+  stats.children[2].innerText = `Intelligence: ${hero1.int}`;
+  stats.children[3].innerText = `Weapon Damage: ${hero1.wp.damage}`;
+
   strength.innerText = `Strength: ${hero1.str}`;
   agility.innerText = `Agility: ${hero1.agl}`;
   intelligence.innerText = `Intelligence: ${hero1.int}`;
-  if (hero1.xp == levelUps[0]) {
-    hero1.lvl = 2;
-    levelUpBonuses();
-  } else if (hero1.xp == levelUps[1]) {
-    hero1.lvl = 3;
-    levelUpBonuses();
-  } else if (hero1.xp == levelUps[2]) {
-    levelUpBonuses();
-    hero1.lvl = 4;
-  } else if (hero1.xp == levelUps[3]) {
-    levelUpBonuses();
-    hero1.lvl = 5;
-  }
 
   levelUp.innerText = `${levelUps[hero1.lvl - 1] - hero1.xp} XP for Level Up`;
   nameUI.innerText = hero1.name;
@@ -623,13 +637,18 @@ const check4Winner = (hero, enemy) => {
 
 // Event Listners
 const updateHP = (hero, enemy) => {
-  heroBox.children[0].innerText = `${hero.name}:       Lvl ${hero.lvl}`;
-  enemyBox.children[0].innerText = `${enemy[1].name}: Lvl       ${enemy[1].lvl}`;
-  heroBox.children[1].innerText = `${hero.hp}/${hero.maxHp}`;
-  enemyBox.children[1].innerText = `${enemy[1].hp}/${enemy[1].maxHp}`;
-  document
-    .querySelectorAll('#fighter-box')[1]
-    .children[3].setAttribute('src', enemy[1].url);
+  if (sandBox.length == 1) {
+    return null;
+  } else {
+    heroBox.children[0].innerText = `${hero.name}:       Lvl ${hero.lvl}`;
+
+    enemyBox.children[0].innerText = `${enemy[1].name}: Lvl       ${enemy[1].lvl}`;
+    heroBox.children[1].innerText = `${hero.hp}/${hero.maxHp}`;
+    enemyBox.children[1].innerText = `${enemy[1].hp}/${enemy[1].maxHp}`;
+    document
+      .querySelectorAll('#fighter-box')[1]
+      .children[3].setAttribute('src', enemy[1].url);
+  }
 };
 
 const startFight = (hero, enemy) => {
@@ -830,13 +849,36 @@ battleOverScreen.addEventListener('click', () => {
     sandBox.splice(1, 1);
   }
   window.scrollTo(0, 0);
+
   battleOverScreen.style.visibility = 'hidden';
   document.getElementById('move-log').innerHTML = '';
   document.getElementById('fight-ui').style.visibility = 'hidden';
   document.body.style.flexDirection = 'column';
-
   updateHP(hero1, sandBox);
   document.getElementById('player-ui').style.visibility = 'visible';
+  if (sandBox.length == 1) {
+    document.getElementById('game-over').classList.remove('hidden');
+    document.getElementById('player-ui').style.visibility = 'hidden';
+    window.scrollTo({
+      top: 1050,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+  if (hero1.xp == levelUps[0]) {
+    hero1.lvl = 2;
+    levelUpBonuses();
+  } else if (hero1.xp == levelUps[1]) {
+    hero1.lvl = 3;
+    levelUpBonuses();
+  } else if (hero1.xp == levelUps[2]) {
+    levelUpBonuses();
+    hero1.lvl = 4;
+  } else if (hero1.xp == levelUps[3]) {
+    levelUpBonuses();
+    hero1.lvl = 5;
+  }
+
   playerUiUpdate();
 });
 
@@ -863,8 +905,3 @@ document.getElementById('first-fight').addEventListener('click', () => {
   document.getElementById('first-fight').classList.add('hidden');
 });
 document.getElementById('next-fight').addEventListener('click', nextFight);
-
-hero1.str += 1000;
-// unit1.agl += 50;
-
-// startFight(hero1, sandBox);

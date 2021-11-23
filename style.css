@@ -488,3 +488,20 @@ align-items: center;
   background-position: center;
 
 }
+
+#stats {
+  height: 100px;
+  background-color: goldenrod;
+  border: black 2px solid;
+  width: 200px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#game-over {
+  background-color: goldenrod;
+  width: 100%;
+  height: 900px;
+  text-align: center;
+  font-size: 400px;
+}
