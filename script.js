@@ -1,4 +1,6 @@
 // HTML elements
+const heroName = prompt('What is your name Warrior?');
+
 const headAttack = document.getElementById('head-attack');
 const torsoAttack = document.getElementById('torso-attack');
 const legAttack = document.getElementById('leg-attack');
@@ -332,7 +334,7 @@ class Equipment {
     this.url = url;
   }
 }
-const hero1 = new Hero(1, 'Blademaster');
+const hero1 = new Hero(1, heroName);
 
 const unit1 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
 unit1.agl += 2;
