@@ -332,14 +332,32 @@ class Equipment {
     this.url = url;
   }
 }
+const hero1 = new Hero(1, 'Blademaster');
 
 const unit1 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
 const unit2 = new FightingUnit(1, 'Peasant', 'images/characters/peasant.png');
 const unit3 = new FightingUnit(2, 'Peasant', 'images/characters/peasant.png');
 const unit4 = new FightingUnit(2, 'Peasant', 'images/characters/peasant.png');
-const hero1 = new Hero(1, 'Blademaster');
+const unit5 = new FightingUnit(
+  3,
+  'Troll Warrior',
+  'images/characters/troll.png'
+);
+const unit6 = new FightingUnit(
+  3,
+  'Troll Warrior',
+  'images/characters/troll.png'
+);
+const unit7 = new FightingUnit(
+  3,
+  'Troll Warrior',
+  'images/characters/troll.png'
+);
 const boss1 = new Boss(2, 'Orgrim', 'images/characters/orc-warrior.png');
 const boss2 = new Boss(3, 'Leonidas', 'images/characters/spartan.png');
+const boss3 = new Boss(5, 'Centurion', 'images/characters/roman.png');
+const boss4 = new Boss(8, 'Grand mage', 'images/characters/wizard1.png');
+
 const sword1 = new Equipment(
   0,
   15,
@@ -414,7 +432,20 @@ const boots1 = new Equipment(
   'boots',
   'images/equipment/boots1.png'
 );
-const sandBox = [hero1, unit1, unit2, boss1, unit3, unit4, boss2];
+const sandBox = [
+  hero1,
+  unit1,
+  unit2,
+  boss1,
+  unit3,
+  unit4,
+  boss2,
+  unit5,
+  unit6,
+  unit7,
+  boss3,
+  boss4
+];
 const newObjective = document.createElement('div');
 newObjective.setAttribute('id', 'new-objective');
 objectivesMenu.appendChild(newObjective);
@@ -424,12 +455,14 @@ const objectivesList = [
   'Time to face the boss! Take out that big green bully',
   'You did well. Rest up, you have more tune up fights coming up',
   'This one was easy. Get another W before the boss fight',
-  'Take out this Spartan warrior to solidify your position in the Club'
+  'Take out this Spartan warrior to solidify your position in the Club',
+  'Good job! Now take out those troll warriors',
+  'One down. Two to go',
+  "These trolls don't stand a chance",
+  'Time to face the Roman Centurion! Good luck',
+  'This is your final test. Defeat grand wizard for the title of the champion'
 ];
 hero1.inventory.push(sword1);
-// hero1.inventory.push(helm1);
-// hero1.inventory.push(armor1);
-// hero1.inventory.push(boots1);
 
 hero1.wp = hero1.inventory[0];
 
@@ -458,27 +491,42 @@ const nextFight = () => {
 
 const updateObjectives = () => {
   switch (sandBox.length) {
-    case 7:
-      newObjective.innerText = objectivesList[0];
+    case 12:
+      newObjective.innerHTML = objectivesList[0];
+      break;
+    case 11:
+      newObjective.innerText = objectivesList[1];
 
       break;
-    case 6:
-      newObjective.innerText = objectivesList[1];
-      break;
-    case 5:
+    case 10:
       newObjective.innerText = objectivesList[2];
       break;
-    case 4:
+    case 9:
       newObjective.innerText = objectivesList[3];
       break;
-    case 3:
+    case 8:
       newObjective.innerText = objectivesList[4];
       break;
-    case 2:
+    case 7:
       newObjective.innerText = objectivesList[5];
       break;
-    case 1:
+    case 6:
       newObjective.innerText = objectivesList[6];
+      break;
+    case 5:
+      newObjective.innerText = objectivesList[7];
+      break;
+    case 4:
+      newObjective.innerText = objectivesList[8];
+      break;
+    case 3:
+      newObjective.innerText = objectivesList[9];
+      break;
+    case 2:
+      newObjective.innerText = objectivesList[10];
+      break;
+    case 1:
+      newObjective.innerText = objectivesList[11];
       break;
   }
 };
@@ -490,6 +538,7 @@ const levelUpBonuses = () => {
   hero1.lck += 1;
   hero1.ap += 10;
   hero1.hp += 20;
+  hero1.maxHp += 20;
 };
 
 const playerUiUpdate = () => {
@@ -545,7 +594,21 @@ const check4Winner = (hero, enemy) => {
     haveWinner = true;
 
     winner = hero.name;
-    declareWinnerMessage.innerText = `${hero.name} is victorious`;
+    if (sandBox.length == 10) {
+      declareWinnerMessage.innerText = `${hero.name} is victorious. Orgrim gave you a gift as a token of respect`;
+      hero1.inventory.push(helm1);
+      updateInventory();
+    } else if (sandBox.length == 7) {
+      declareWinnerMessage.innerText = `${hero.name} is victorious. Leonidas left his armor for you.`;
+      hero1.inventory.push(armor1);
+      updateInventory();
+    } else if (sandBox.length == 3) {
+      declareWinnerMessage.innerText = `${hero.name} is victorious. Roman centurion dropped his armored boots for you.`;
+      hero1.inventory.push(boots1);
+      updateInventory();
+    } else {
+      declareWinnerMessage.innerText = `${hero.name} is victorious.`;
+    }
   } else if (hero.hp <= 0) {
     battleOverScreen.style.visibility = 'visible';
     fightInProgress = false;
@@ -801,7 +864,7 @@ document.getElementById('first-fight').addEventListener('click', () => {
 });
 document.getElementById('next-fight').addEventListener('click', nextFight);
 
-// hero1.str += 100;
+hero1.str += 1000;
 // unit1.agl += 50;
 
 // startFight(hero1, sandBox);
