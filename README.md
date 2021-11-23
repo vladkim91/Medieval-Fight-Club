@@ -11,24 +11,19 @@ Warriors and wizards from all kingdoms travel to participate in tournament in ho
 
 ### Level Up
 * Defeat peasants and low ranking warriors to collect expirience and coins.
-* Purchase weapons and armor from the store to enchance your combat abilities
-* Purchase and equip battle potions to stay in the fight a bit longer
+* Collect weapon and armor from defeating bosses to enchance your combat abilities
 ____________________
 ## *Choose your style*
 ### Choose how you want to distribute your attributes to create a unique warrior
   * Strength
   * Agility
   * Intelligence
-  * Luck
+
 ________
-## Choose from the pool of 18 spells 
+## Screen Shots
 
-* 6 spells for strength warrior heroes to enchance melee damage or armor
-* 6 spells for agility assasin heroes to expose mages and slow enemy
-* 6 spells for intelligence based wizard to annihilate your enemy with a series of deadly spells 
-
-### Bonus
-- Choose 3 unique traits to be well rounded fighter or unstopable specialist
+![screen-shot1](images/characters/ss4.png)
+![screen-shot2](images/characters/ss2.png)
 ________
 ## Win Conditions
 
