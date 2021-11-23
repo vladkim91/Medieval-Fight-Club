@@ -27,6 +27,10 @@ const strength = document.getElementById('strength');
 const agility = document.getElementById('agility');
 const intelligence = document.getElementById('intelligence');
 const inventoryContainer = document.getElementById('inventory-container');
+const fightUiHelm = document.getElementById('helm');
+const fightUiArmor = document.getElementById('armor');
+const fightUiSword = document.getElementById('sword');
+const fightUiBoots = document.getElementById('boots');
 
 const everyBattleOption = [
   headAttack,
@@ -65,10 +69,6 @@ class FightingUnit {
     let hitMessage = '';
 
     let totalArmor;
-    // target.torsoArmor.defense +
-    // target.helmArmor.defense +
-    // target.legArmor.defense;
-    // if (helmArmor.defense isNaN)
 
     if (
       !isNaN(target.helmArmor.defense) &&
@@ -103,6 +103,12 @@ class FightingUnit {
       totalArmor = target.torsoArmor.defense;
     } else if (!isNaN(target.legArmor.defense)) {
       totalArmor = target.legArmor.defense;
+    } else if (
+      isNaN(target.helmArmor.defense) &&
+      isNaN(target.torsoArmor.defense) &&
+      isNaN(target.legArmor.defense)
+    ) {
+      totalArmor = 0;
     }
 
     if (this.wp !== {}) {
@@ -145,7 +151,7 @@ class FightingUnit {
         if (totalArmor > hitStrength) {
           hitMessage = `${target.name}'s armor deflected all damage by ${this.name}`;
         } else {
-          target.hp -= hitStrength - totalArmor;
+          target.hp -= hitStrength.toFixed(0) - totalArmor;
           hitMessage = `${this.name} hit ${target.name} to deal ${
             hitStrength.toFixed(0) - totalArmor
           } damage in the ${this.offense}`;
@@ -370,12 +376,50 @@ const helm1 = new Equipment(
   'helmet',
   'images/equipment/helm1.gif'
 );
+
+const armor1 = new Equipment(
+  10,
+  0,
+  200,
+  1,
+  100,
+  5,
+  2,
+  0,
+  0,
+  -10,
+  10,
+  0,
+  0,
+  0,
+  'armor',
+  'images/equipment/arm1.gif'
+);
+
+const boots1 = new Equipment(
+  5,
+  0,
+  199,
+  1,
+  100,
+  0,
+  4,
+  0,
+  0,
+  0,
+  5,
+  10,
+  0,
+  0,
+  'boots',
+  'images/equipment/boots1.png'
+);
 const sandBox = [hero1, unit1, unit2, boss1, unit3, unit4, boss2];
 const newObjective = document.createElement('div');
 newObjective.setAttribute('id', 'new-objective');
 objectivesMenu.appendChild(newObjective);
 const objectivesList = [
-  'Buy yourself weapon and face your first opponent',
+  'Prepare for you first opponent. Choose a body part you want to attack and block',
   'Greate job! You need another tune up fight before your first big test',
   'Time to face the boss! Take out that big green bully',
   'You did well. Rest up, you have more tune up fights coming up',
@@ -383,9 +427,11 @@ const objectivesList = [
   'Take out this Spartan warrior to solidify your position in the Club'
 ];
 hero1.inventory.push(sword1);
-hero1.inventory.push(helm1);
+// hero1.inventory.push(helm1);
+// hero1.inventory.push(armor1);
+// hero1.inventory.push(boots1);
+
 hero1.wp = hero1.inventory[0];
-hero1.helmArmor = hero1.inventory[1];
 
 const updateInventory = () => {
   document.getElementById('inventory-container').innerHTML = '';
@@ -437,15 +483,25 @@ const updateObjectives = () => {
   }
 };
 updateObjectives();
+const levelUpBonuses = () => {
+  hero1.str += 1;
+  hero1.agl += 1;
+  hero1.int += 1;
+  hero1.lck += 1;
+  hero1.ap += 10;
+  hero1.hp += 20;
+};
 
 const playerUiUpdate = () => {
-  const levelUpBonuses = () => {
-    hero1.str += 1;
-    hero1.agl += 1;
-    hero1.int += 1;
-    hero1.lck += 1;
-    hero1.ap += 10;
-  };
+  fightUiSword.style.backgroundImage = `url(${hero1.inventory[0].url})`;
+  if (hero1.inventory.length == 2) {
+    fightUiHelm.style.backgroundImage = `url(${hero1.inventory[1].url})`;
+  } else if (hero1.inventory.length == 3) {
+    fightUiArmor.style.backgroundImage = `url(${hero1.inventory[2].url})`;
+  } else if (hero1.inventory.length == 4) {
+    fightUiBoots.style.backgroundImage = `url(${hero1.inventory[3].url})`;
+  }
+
   strength.innerText = `Strength: ${hero1.str}`;
   agility.innerText = `Agility: ${hero1.agl}`;
   intelligence.innerText = `Intelligence: ${hero1.int}`;
@@ -456,11 +512,11 @@ const playerUiUpdate = () => {
     hero1.lvl = 3;
     levelUpBonuses();
   } else if (hero1.xp == levelUps[2]) {
+    levelUpBonuses();
     hero1.lvl = 4;
-    levelUpBonuses();
   } else if (hero1.xp == levelUps[3]) {
-    hero1.lvl = 5;
     levelUpBonuses();
+    hero1.lvl = 5;
   }
 
   levelUp.innerText = `${levelUps[hero1.lvl - 1] - hero1.xp} XP for Level Up`;
@@ -735,6 +791,7 @@ restButton.addEventListener('click', () => {
 
 document.getElementById('inventory').addEventListener('click', () => {
   document.getElementById('inventory-wrapper').classList.toggle('hidden');
+  playerUiUpdate();
 });
 
 document.getElementById('first-fight').addEventListener('click', () => {
