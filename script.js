@@ -917,7 +917,7 @@ document.getElementById('inventory').addEventListener('click', () => {
     });
   } else if (inventoryContainer.children.length == 4) {
     inventoryContainer.children[3].addEventListener('mouseover', () => {
-      itemDesc.innerText = `Bronze armor: Armor ${hero1.inventory[3].defense}`;
+      itemDesc.innerText = `Centurion boots: Armor ${hero1.inventory[3].defense}`;
       spells.appendChild(itemDesc);
     });
   }
